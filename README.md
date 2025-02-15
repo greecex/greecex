@@ -1,18 +1,13 @@
-# Greecex
+# Greece |> Elixir
 
-To start your Phoenix server:
+This is an Elixir Phoenix LiveView web site for the Greece |> Elixir community. The community's purpose is to promote Elixir and its ecosystem in Greece, foster a vibrant developer community, and make Elixir one of the most widely used language in the country.
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+## Stack
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
-
-## Learn more
-
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+- Elixir
+- Phoenix
+- LiveView
+- TailwindCSS
+- Fly.io (for deployment)
+- Supabase (Postgres)
+- Plausible (Analytics)
