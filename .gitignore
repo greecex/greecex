@@ -23,7 +23,7 @@ erl_crash.dump
 /tmp/
 
 # Ignore package tarball (built via "mix hex.build").
-greecex-*.tar
+ournextbook-*.tar
 
 # Ignore assets that are produced by build tools.
 /priv/static/assets/
@@ -35,3 +35,8 @@ greecex-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Vim
+*.swp
+
+# macOS
+.DS_Store

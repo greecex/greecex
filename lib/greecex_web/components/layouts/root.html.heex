@@ -4,14 +4,52 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title default="Greecex" suffix=" · Phoenix Framework">
+    <.live_title default="Greece |> Elixir" suffix=" · Greece |> Elixir">
       {assigns[:page_title]}
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
-  <body class="bg-white">
-    {@inner_content}
+
+  <body class="bg-white min-h-screen flex flex-col">
+    <header class="px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col items-center border-b border-zinc-100 py-4 text-sm">
+        <a href="/" class="relative w-16 h-16 group">
+          <img
+            src={~p"/images/elixir-plain.svg"}
+            class="w-16 absolute transition-opacity duration-300 group-hover:opacity-0"
+          />
+          <img
+            src={~p"/images/elixir.svg"}
+            class="w-16 absolute opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          />
+        </a>
+
+        <p class="mt-2 text-xl font-semibold text-zinc-900 transition-all duration-300 hover:text-purple-600 hover:tracking-wide">
+          <a href="/">
+            Greece |> Elixir
+          </a>
+        </p>
+
+        <p class="mt-1 text-sm text-zinc-600">
+          Building the Elixir community in Greece, one line of code at a time.
+        </p>
+      </div>
+    </header>
+
+    <main class="flex-1 px-4 py-20 sm:px-6 lg:px-8">
+      {@inner_content}
+    </main>
+
+    <footer class="flex justify-center items-center py-4">
+      <p class="flex items-center space-x-2">
+        A little
+        <.link href="https://amignosis.com/stars">
+          <img src={~p"/images/star.png"} class="w-5 h-5 mx-2" />
+        </.link>
+        created by <a href="https://amignosis.com" class="underline">Amignosis</a>
+      </p>
+    </footer>
   </body>
 </html>
