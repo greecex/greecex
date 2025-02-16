@@ -1,4 +1,4 @@
-<img src="assets/static/images/elixir.svg" alt="Greece |> Elixir" width="20">
+<img src="priv/static/images/elixir.svg" alt="Greece |> Elixir" width="20">
 
 # Greece |> Elixir
 
