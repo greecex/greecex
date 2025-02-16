@@ -1,6 +1,4 @@
-<img src="priv/static/images/elixir.svg" alt="Greece |> Elixir" width="20">
-
-# Greece |> Elixir
+# <img src="priv/static/images/elixir.svg" alt="Greece |> Elixir" width="30"> Greece |> Elixir
 
 This is an Elixir Phoenix LiveView web site for the Greece |> Elixir community. The community's purpose is to promote Elixir and its ecosystem in Greece, foster a vibrant developer community, and make Elixir one of the most widely used language in the country.
 
