@@ -18,6 +18,7 @@ defmodule GreecexWeb.Router do
     pipe_through :browser
 
     live "/", HomeLive
+    live "/trademark", TrademarkLive
   end
 
   # Other scopes may use custom stacks.
