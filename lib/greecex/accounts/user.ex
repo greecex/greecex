@@ -9,9 +9,12 @@ defmodule Greecex.Accounts.User do
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
+    field :role, :string, default: "member"
 
     timestamps(type: :utc_datetime)
   end
+
+  @roles ~w(admin member)a
 
   @doc """
   A user changeset for registration.
@@ -41,6 +44,7 @@ defmodule Greecex.Accounts.User do
     |> cast(attrs, [:email, :password])
     |> validate_email(opts)
     |> validate_password(opts)
+    |> validate_inclusion(:role, @roles)
   end
 
   defp validate_email(changeset, opts) do

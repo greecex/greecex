@@ -92,6 +92,12 @@ defmodule Greecex.AccountsTest do
       assert is_nil(user.confirmed_at)
       assert is_nil(user.password)
     end
+
+    test "registered user is a member" do
+      email = unique_user_email()
+      {:ok, user} = Accounts.register_user(valid_user_attributes(email: email))
+      assert user.role == "member"
+    end
   end
 
   describe "change_user_registration/2" do
