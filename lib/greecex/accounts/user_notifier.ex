@@ -8,7 +8,7 @@ defmodule Greecex.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"Greece |> Elixir", "community@greecex.org"})
+      |> from({"Greece |> Elixir", "greecex@amignosis.com"})
       |> subject(subject)
       |> text_body(body)
 
