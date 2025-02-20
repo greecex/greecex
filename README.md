@@ -21,7 +21,7 @@ This is an initiative started in Feb 2025 by [Petros](https://petros.blog) (that
 
 ### Wanna help?
 
-Are you interested in helping? Please [shoot an email](mailto:petros@amignosis.com?subject=Help%20with%20Greecex) with a few details about you, your background, and why you'd love to help.
+Are you interested in helping? Please [shoot an email](mailto:greecex@amignosis.com?subject=Help%20with%20Greecex) with a few details about you, your background, and why you'd love to help.
 
 ## Why Amignosis?
 
