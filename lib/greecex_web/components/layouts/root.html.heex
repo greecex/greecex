@@ -4,6 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
+    <!-- OpenGraph -->
+    <meta property="og:title" content="Greece |> Elixir - The Elixir Community in Greece" />
+    <meta
+      property="og:description"
+      content="Join the Greek Elixir community! Meet developers, share knowledge, and grow Elixir in Greece."
+    />
+    <meta property="og:url" content="https://greecex.org" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={~p"/images/greecex-og-image.png"} />
+    <meta property="og:image" content={~p"/images/greecex-og-image-small.png"} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Greece |> Elixir" />
     <.live_title default="Greece |> Elixir" suffix=" · Greece |> Elixir">
       {assigns[:page_title]}
     </.live_title>
