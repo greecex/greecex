@@ -21,6 +21,7 @@ defmodule GreecexWeb.Router do
     pipe_through :browser
 
     live "/", HomeLive
+    live "/subscribe", SubscribeLive
     live "/trademark", TrademarkLive
     live "/privacy", PrivacyLive
   end
