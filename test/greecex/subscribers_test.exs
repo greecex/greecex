@@ -27,12 +27,6 @@ defmodule Greecex.SubscribersTest do
     test "fails with invalid attributes" do
       assert {:error, %Ecto.Changeset{}} = Subscribers.create_subscriber(%{})
     end
-
-    test "enforces unique email addresses" do
-      assert {:ok, %Subscriber{}} = Subscribers.create_subscriber(@valid_attrs)
-      assert {:error, changeset} = Subscribers.create_subscriber(@valid_attrs)
-      assert "has already been taken" in errors_on(changeset).email
-    end
   end
 
   describe "get_subscriber_by_email/1" do
@@ -84,5 +78,60 @@ defmodule Greecex.SubscribersTest do
     """
 
     assert_email_sent(to: to, subject: subject, text_body: text_body)
+  end
+
+  test "email is sent to an existing subscriber with a new token on repeat submission" do
+    email = "repeat@example.com"
+    subscriber_attrs = %{"email" => email, "city" => "Agrinio"}
+
+    # First submission: create the subscriber
+    {:ok, initial_subscriber} = Subscribers.create_subscriber(subscriber_attrs)
+    initial_token = initial_subscriber.confirmation_token
+
+    # Email details (assuming SubscriberNotifier mimics your original test)
+    to = [{email, email}]
+    subject = "Thank you for joining Greece |> Elixir"
+
+    assert_email_sent(
+      to: to,
+      subject: subject,
+      text_body:
+        generate_text_body(
+          email,
+          Phoenix.VerifiedRoutes.url(~p"/confirm/#{initial_token}")
+        )
+    )
+
+    # Second submission: same email
+    {:ok, updated_subscriber} = Subscribers.create_subscriber(subscriber_attrs)
+
+    # Check that the token changed
+    new_token = updated_subscriber.confirmation_token
+    assert new_token != initial_token, "Expected a new confirmation token for repeat submission"
+
+    assert_email_sent(
+      to: to,
+      subject: subject,
+      text_body:
+        generate_text_body(
+          email,
+          Phoenix.VerifiedRoutes.url(~p"/confirm/#{new_token}")
+        )
+    )
+  end
+
+  defp generate_text_body(email, confirmation_url) do
+    """
+    Hi #{email},
+
+    Thank you for joining Greece |> Elixir!
+
+    Can you please confirm your email address by clicking on the link below?
+
+    #{confirmation_url}
+
+    Cheers,
+    The Greece |> Elixir Team
+    """
   end
 end

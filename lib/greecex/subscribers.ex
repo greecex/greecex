@@ -7,9 +7,12 @@ defmodule Greecex.Subscribers do
   use Phoenix.VerifiedRoutes, endpoint: GreecexWeb.Endpoint, router: GreecexWeb.Router
 
   @doc """
-  Creates a new subscriber with the given attributes.
+  Creates a new subscriber or updates an existing one with the given attributes.
 
-  Returns `{:ok, subscriber}` on success or `{:error, changeset}` on failure.
+  If the email is new, creates a subscriber. If it already exists, refreshes the
+  confirmation token. In both cases, sends a confirmation email.
+
+  Returns `{:ok, subscriber}` on success or `{:error, changeset}` on validation failure.
 
   ## Examples
 
@@ -20,18 +23,40 @@ defmodule Greecex.Subscribers do
       {:error, %Ecto.Changeset{}}
   """
   def create_subscriber(attrs) do
-    attrs = Map.put(attrs, "confirmation_token", generate_token())
+    email = Map.get(attrs, "email")
+    existing_subscriber = if email, do: get_subscriber_by_email(email), else: nil
 
-    %Subscriber{}
-    |> Subscriber.changeset(attrs)
-    |> Repo.insert()
-    |> case do
-      {:ok, subscriber} ->
-        send_confirmation_email(subscriber)
-        {:ok, subscriber}
+    case existing_subscriber do
+      nil ->
+        # New subscriber: create as before
+        attrs = Map.put(attrs, "confirmation_token", generate_token())
 
-      {:error, changeset} ->
-        {:error, changeset}
+        %Subscriber{}
+        |> Subscriber.changeset(attrs)
+        |> Repo.insert()
+        |> case do
+          {:ok, subscriber} ->
+            send_confirmation_email(subscriber)
+            {:ok, subscriber}
+
+          {:error, changeset} ->
+            {:error, changeset}
+        end
+
+      subscriber ->
+        # Existing subscriber: update token and send email
+        subscriber
+        |> Ecto.Changeset.change(confirmation_token: generate_token())
+        |> Repo.update()
+        |> case do
+          {:ok, updated_subscriber} ->
+            send_confirmation_email(updated_subscriber)
+            {:ok, updated_subscriber}
+
+          {:error, changeset} ->
+            # This should be rare (e.g., DB error), but handle it
+            {:error, changeset}
+        end
     end
   end
 
