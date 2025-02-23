@@ -2,14 +2,44 @@ defmodule Greecex.Subscribers do
   import Ecto.Query, warn: false
   alias Greecex.Repo
   alias Greecex.Subscribers.Subscriber
+  alias Greecex.Subscribers.SubscriberNotifier
 
+  use Phoenix.VerifiedRoutes, endpoint: GreecexWeb.Endpoint, router: GreecexWeb.Router
+
+  @doc """
+  Creates a new subscriber with the given attributes.
+
+  Returns `{:ok, subscriber}` on success or `{:error, changeset}` on failure.
+
+  ## Examples
+
+      iex> create_subscriber(%{"email" => "user@example.com"})
+      {:ok, %Subscriber{email: "user@example.com"}}
+
+      iex> create_subscriber(%{"email" => "invalid"})
+      {:error, %Ecto.Changeset{}}
+  """
   def create_subscriber(attrs) do
-    attrs =
-      Map.put(attrs, "confirmation_token", generate_token())
+    attrs = Map.put(attrs, "confirmation_token", generate_token())
 
     %Subscriber{}
     |> Subscriber.changeset(attrs)
     |> Repo.insert()
+    |> case do
+      {:ok, subscriber} ->
+        send_confirmation_email(subscriber)
+        {:ok, subscriber}
+
+      {:error, changeset} ->
+        {:error, changeset}
+    end
+  end
+
+  defp send_confirmation_email(subscriber) do
+    confirmation_url =
+      Phoenix.VerifiedRoutes.url(~p"/confirm/#{subscriber.confirmation_token}")
+
+    SubscriberNotifier.deliver_confirmation_instructions(subscriber, confirmation_url)
   end
 
   def get_subscriber_by_email(email) do

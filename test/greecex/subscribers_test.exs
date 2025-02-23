@@ -4,6 +4,9 @@ defmodule Greecex.SubscribersTest do
   alias Greecex.Subscribers
   alias Greecex.Subscribers.Subscriber
 
+  import Swoosh.TestAssertions
+  use Phoenix.VerifiedRoutes, endpoint: GreecexWeb.Endpoint, router: GreecexWeb.Router
+
   describe "create_subscriber/1" do
     @valid_attrs %{
       "email" => "test@example.com",
@@ -54,5 +57,32 @@ defmodule Greecex.SubscribersTest do
     test "returns error with invalid token" do
       assert {:error, "Invalid token"} = Subscribers.confirm_subscriber("invalid-token")
     end
+  end
+
+  test "email is sent to the subscriber" do
+    email = "test@example.com"
+    subscriber = %{"email" => email, "city" => "Agrinio"}
+    {:ok, subscriber} = Subscribers.create_subscriber(subscriber)
+
+    to = [{email, email}]
+    subject = "Thank you for joining Greece |> Elixir"
+
+    confirmation_url =
+      Phoenix.VerifiedRoutes.url(~p"/confirm/#{subscriber.confirmation_token}")
+
+    text_body = """
+    Hi #{subscriber.email},
+
+    Thank you for joining Greece |> Elixir!
+
+    Can you please confirm your email address by clicking on the link below?
+
+    #{confirmation_url}
+
+    Cheers,
+    The Greece |> Elixir Team
+    """
+
+    assert_email_sent(to: to, subject: subject, text_body: text_body)
   end
 end
