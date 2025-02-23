@@ -1,5 +1,6 @@
 defmodule GreecexWeb.SubscribeLiveTest do
   use GreecexWeb.ConnCase
+  alias Greecex.Subscribers
   import Phoenix.LiveViewTest
 
   describe "SubscribeLive" do
@@ -23,6 +24,34 @@ defmodule GreecexWeb.SubscribeLiveTest do
 
     test "creates subscriber with valid data", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/subscribe")
+
+      subscriber = %{
+        subscriber: %{
+          email: "test@example.com",
+          city: "Athens",
+          elixir_experience: "Beginner",
+          willing_to_coorganize: true
+        }
+      }
+
+      view
+      |> form("#subscribe-form", subscriber)
+      |> render_submit()
+
+      assert render(view) =~ "Thank you for subscribing!"
+    end
+
+    test "does not reveal that an email has already been used to subscribe", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/subscribe")
+
+      existing_subscriber = %{
+        "email" => "test@example.com",
+        "city" => "Athens",
+        "elixir_experience" => "I am experienced",
+        "willing_to_coorganize" => true
+      }
+
+      Subscribers.create_subscriber(existing_subscriber)
 
       subscriber = %{
         subscriber: %{

@@ -77,6 +77,9 @@ defmodule GreecexWeb.SubscribeLive do
       {:ok, _subscriber} ->
         {:noreply, assign(socket, success: true, show: false)}
 
+      {:error, %Ecto.Changeset{errors: [email: {"has already been taken", _}]}} ->
+        {:noreply, assign(socket, success: true, show: false)}
+
       {:error, changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
