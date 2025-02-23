@@ -20,5 +20,24 @@ defmodule GreecexWeb.SubscribeLiveTest do
              })
              |> render_change() =~ "must have the @ sign and no spaces"
     end
+
+    test "creates subscriber with valid data", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/subscribe")
+
+      subscriber = %{
+        subscriber: %{
+          email: "test@example.com",
+          city: "Athens",
+          elixir_experience: "Beginner",
+          willing_to_coorganize: true
+        }
+      }
+
+      view
+      |> form("#subscribe-form", subscriber)
+      |> render_submit()
+
+      assert render(view) =~ "Thank you for subscribing!"
+    end
   end
 end
