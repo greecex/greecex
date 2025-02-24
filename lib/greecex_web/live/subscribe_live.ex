@@ -4,8 +4,28 @@ defmodule GreecexWeb.SubscribeLive do
   alias Greecex.Subscribers
   alias Greecex.Subscribers.Subscriber
 
+  alias RemoteIp
+
+  require Logger
+
   def mount(_params, _session, socket) do
     changeset = Subscribers.change_subscriber(%Subscriber{})
+    peer_data = get_connect_info(socket, :peer_data)
+    x_headers = get_connect_info(socket, :x_headers)
+
+    address =
+      RemoteIp.from(x_headers, proxies: ["66.241.124.124"])
+
+    address_as_string =
+      cond do
+        address != nil ->
+          address
+          |> Tuple.to_list()
+          |> Enum.join(".")
+
+        true ->
+          peer_data.address |> Tuple.to_list() |> Enum.join(".")
+      end
 
     {:ok,
      assign(socket,
@@ -14,6 +34,7 @@ defmodule GreecexWeb.SubscribeLive do
        success: false,
        show: true,
        error: nil,
+       client_ip: address_as_string,
        form: to_form(changeset),
        cities: city_options()
      )}
@@ -91,6 +112,8 @@ defmodule GreecexWeb.SubscribeLive do
         socket
       ) do
     if website != "" do
+      Logger.warning("Possible bot detected from #{socket.assigns.client_ip}", subscriber_params)
+
       {:noreply,
        assign(socket,
          error: "It seems like you're a bot. If not, please try again.",
@@ -98,15 +121,40 @@ defmodule GreecexWeb.SubscribeLive do
          show: true
        )}
     else
-      case Subscribers.create_subscriber(subscriber_params) do
-        {:ok, _subscriber} ->
-          {:noreply, assign(socket, success: true, show: false)}
+      key = "subscription:#{socket.assigns.client_ip}"
 
-        {:error, %Ecto.Changeset{errors: [email: {"has already been taken", _}]}} ->
-          {:noreply, assign(socket, success: true, show: false)}
+      case Greecex.RateLimit.hit(key, :timer.hours(1), 5) do
+        {:allow, _count} ->
+          case Subscribers.create_subscriber(subscriber_params) do
+            {:ok, _subscriber} ->
+              Logger.info(
+                "Subscriber with email #{subscriber_params["email"]} created from #{socket.assigns.client_ip}"
+              )
 
-        {:error, changeset} ->
-          {:noreply, assign(socket, changeset: changeset)}
+              {:noreply, assign(socket, success: true, show: false, error: nil)}
+
+            {:error, %Ecto.Changeset{errors: [email: {"has already been taken", _}]}} ->
+              {:noreply, assign(socket, success: true, show: false, error: nil)}
+
+            {:error, changeset} ->
+              {:noreply,
+               assign(socket,
+                 form: to_form(changeset),
+                 error: "Something went wrong. Please try again.",
+                 success: false,
+                 show: true
+               )}
+          end
+
+        {:deny, _retry_after} ->
+          Logger.error("Too many requests from #{socket.assigns.client_ip}")
+
+          {:noreply,
+           assign(socket,
+             error: "Too many requests. Try again in a bit.",
+             success: false,
+             show: true
+           )}
       end
     end
   end

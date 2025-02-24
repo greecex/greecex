@@ -98,4 +98,37 @@ defmodule GreecexWeb.SubscribeLiveTest do
       refute result =~ "Thank you for subscribing"
     end
   end
+
+  describe "Rate limit" do
+    test "rejects submission when rate limit is exceeded", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/subscribe")
+      # Matches test env
+      client_ip = "127.0.0.1"
+      key = "subscription:#{client_ip}"
+
+      for _ <- 1..5 do
+        Greecex.RateLimit.hit(key, :timer.hours(1), 5)
+      end
+
+      params = %{
+        "subscriber" => %{
+          "email" => "user@example.com",
+          "city" => "Thessaloniki",
+          "willing_to_coorganize" => "true",
+          "elixir_experience" => "Elixir newbie"
+        },
+        "website" => ""
+      }
+
+      result = render_submit(view, "subscribe", params)
+
+      assert result =~ "Too many requests. Try again in a bit."
+      assert result =~ "subscribe-form"
+      refute result =~ "Thank you for subscribing"
+
+      on_exit(fn ->
+        :ets.delete_all_objects(Greecex.RateLimit)
+      end)
+    end
+  end
 end
