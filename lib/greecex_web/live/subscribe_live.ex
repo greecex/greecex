@@ -20,6 +20,12 @@ defmodule GreecexWeb.SubscribeLive do
 
   def render(assigns) do
     ~H"""
+    <div class="max-w-3xl mx-auto text-center px-6">
+      <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
+        Subscribe for updates
+      </h1>
+    </div>
+
     <%= if @show do %>
       <.simple_form for={@form} id="subscribe-form" phx-change="validate" phx-submit="subscribe">
         <.input
@@ -47,11 +53,11 @@ defmodule GreecexWeb.SubscribeLive do
         />
         <div class="prose">
           <p>
-            By submitting this form to subscribe you accept our <.link navigate="/policies">policies</.link>.
+            By submitting this form you accept our <.link navigate="/policies">policies</.link>.
           </p>
         </div>
         <:actions>
-          <.button>Subscribe</.button>
+          <.button phx-disable-with="Subscribing..." type="submit">Subscribe</.button>
         </:actions>
       </.simple_form>
     <% end %>
