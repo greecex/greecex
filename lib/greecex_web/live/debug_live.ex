@@ -18,7 +18,7 @@ defmodule GreecexWeb.DebugLive do
           |> Enum.join(".")
 
         true ->
-          nil
+          peer_data.address |> Tuple.to_list() |> Enum.join(".")
       end
 
     # address =
