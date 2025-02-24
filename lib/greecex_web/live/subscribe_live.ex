@@ -53,7 +53,7 @@ defmodule GreecexWeb.SubscribeLive do
         />
         <div class="prose">
           <p>
-            By submitting this form you accept our <.link navigate="/policies">policies</.link>.
+            By submitting this form, you confirm that you have read and agreed to our <.link navigate="/policies">policies</.link>.
           </p>
         </div>
         <:actions>

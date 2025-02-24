@@ -23,6 +23,7 @@ defmodule GreecexWeb.Router do
     live "/", HomeLive
     live "/subscribe", SubscribeLive
     live "/confirm/:token", ConfirmLive
+    live "/policies", PoliciesLive
     live "/trademark", TrademarkLive
     live "/privacy", PrivacyLive
   end
