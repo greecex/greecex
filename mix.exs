@@ -61,7 +61,8 @@ defmodule Greecex.MixProject do
       {:bandit, "~> 1.5"},
       {:earmark, "~> 1.4"},
       {:hackney, "~> 1.20"},
-      {:hammer, "~> 7.0"}
+      {:hammer, "~> 7.0"},
+      {:remote_ip, "~> 1.2"}
     ]
   end
 
