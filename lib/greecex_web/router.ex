@@ -21,8 +21,12 @@ defmodule GreecexWeb.Router do
     pipe_through :browser
 
     live "/", HomeLive
+    live "/subscribe", SubscribeLive
+    live "/confirm/:token", ConfirmLive
+    live "/policies", PoliciesLive
     live "/trademark", TrademarkLive
     live "/privacy", PrivacyLive
+    live "/about", AboutLive
   end
 
   # Other scopes may use custom stacks.
