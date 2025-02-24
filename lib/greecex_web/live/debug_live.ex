@@ -1,32 +1,13 @@
 defmodule GreecexWeb.DebugLive do
   use GreecexWeb, :live_view
 
-  defp maybe_header_ip(address, header_ip) do
-    if header_ip do
-      header_ip |> List.first() |> String.split(",") |> List.first()
-    else
-      address
-    end
-  end
-
-  defp maybe_peer_data_ip(address, peer_data_ip) do
-    if peer_data_ip do
-      peer_data_ip |> Tuple.to_list() |> Enum.join(".")
-    else
-      address
-    end
-  end
+  alias RemoteIp
 
   def mount(_params, _session, socket) do
     peer_data = get_connect_info(socket, :peer_data)
     x_headers = get_connect_info(socket, :x_headers)
-    header_ip = x_headers[:x_forwarded_for]
-    peer_data_ip = peer_data[:address]
 
-    address =
-      ""
-      |> maybe_header_ip(header_ip)
-      |> maybe_peer_data_ip(peer_data_ip)
+    address = RemoteIp.from(x_headers)
 
     {:ok,
      assign(socket,
