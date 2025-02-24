@@ -113,9 +113,9 @@ defmodule GreecexWeb.HomeLive do
             >
               Subscribe
             </.link>
-            <a href="#" class="text-sm/6 font-semibold text-gray-900">
+            <.link navigate={~p"/about"} class="text-sm/6 font-semibold text-gray-900">
               Learn more <span aria-hidden="true">→</span>
-            </a>
+            </.link>
           </div>
         </div>
       </div>

@@ -26,6 +26,7 @@ defmodule GreecexWeb.Router do
     live "/policies", PoliciesLive
     live "/trademark", TrademarkLive
     live "/privacy", PrivacyLive
+    live "/about", AboutLive
   end
 
   # Other scopes may use custom stacks.
