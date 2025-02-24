@@ -13,6 +13,7 @@ defmodule GreecexWeb.SubscribeLive do
        changeset: changeset,
        success: false,
        show: true,
+       error: nil,
        form: to_form(changeset),
        cities: city_options()
      )}
@@ -51,6 +52,8 @@ defmodule GreecexWeb.SubscribeLive do
           label="What's your experience with Elixir? (Even if none, share a few words about you)"
           type="textarea"
         />
+        <!-- Static honeypot field -->
+        <.input name="website" value="" type="text" style="display: none;" />
         <div class="prose">
           <p>
             By submitting this form, you confirm that you have read and agreed to our <.link navigate="/policies">policies</.link>.
@@ -60,6 +63,9 @@ defmodule GreecexWeb.SubscribeLive do
           <.button phx-disable-with="Subscribing..." type="submit">Subscribe</.button>
         </:actions>
       </.simple_form>
+      <%= if @error do %>
+        <p class="mt-2 text-red-600 text-sm text-center">{@error}</p>
+      <% end %>
     <% end %>
 
     <%= if @success do %>
@@ -79,16 +85,29 @@ defmodule GreecexWeb.SubscribeLive do
     {:noreply, assign(socket, form: to_form(changeset))}
   end
 
-  def handle_event("subscribe", %{"subscriber" => subscriber_params}, socket) do
-    case Subscribers.create_subscriber(subscriber_params) do
-      {:ok, _subscriber} ->
-        {:noreply, assign(socket, success: true, show: false)}
+  def handle_event(
+        "subscribe",
+        %{"subscriber" => subscriber_params, "website" => website},
+        socket
+      ) do
+    if website != "" do
+      {:noreply,
+       assign(socket,
+         error: "It seems like you're a bot. If not, please try again.",
+         success: false,
+         show: true
+       )}
+    else
+      case Subscribers.create_subscriber(subscriber_params) do
+        {:ok, _subscriber} ->
+          {:noreply, assign(socket, success: true, show: false)}
 
-      {:error, %Ecto.Changeset{errors: [email: {"has already been taken", _}]}} ->
-        {:noreply, assign(socket, success: true, show: false)}
+        {:error, %Ecto.Changeset{errors: [email: {"has already been taken", _}]}} ->
+          {:noreply, assign(socket, success: true, show: false)}
 
-      {:error, changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
+        {:error, changeset} ->
+          {:noreply, assign(socket, changeset: changeset)}
+      end
     end
   end
 
