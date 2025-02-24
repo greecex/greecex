@@ -1,4 +1,4 @@
-defmodule GreecexWeb.SubscribeLiveTest do
+defmodule GreecexWeb.ConfirmLiveTest do
   use GreecexWeb.ConnCase
   alias Greecex.Subscribers
   import Phoenix.LiveViewTest
