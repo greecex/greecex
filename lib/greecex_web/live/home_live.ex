@@ -19,6 +19,15 @@ defmodule GreecexWeb.HomeLive do
         streamline development by reducing context switching.
       </p>
 
+      <div class="mt-12 mb-12 text-center space-y-4">
+        <.link
+          navigate={~p"/subscribe"}
+          class="rounded-md bg-purple-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
+        >
+          Subscribe
+        </.link>
+      </div>
+
       <div class="mt-8 text-left space-y-4">
         <h2 class="text-base font-semibold text-gray-900">
           Why join?
@@ -92,8 +101,27 @@ defmodule GreecexWeb.HomeLive do
         </dl>
       </div>
 
-      <div class="mt-10">
-        <!-- Placeholder for the subscription form -->
+      <div class="bg-purple-50 mt-12 mb-2 rounded-md">
+        <div class="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:flex lg:items-center lg:justify-between lg:px-8">
+          <h2 class="max-w-2xl text-2xl font-semibold tracking-tight text-gray-900 sm:text-xl">
+            Feeling major FOMO! <br />Subscribe me to updates.
+          </h2>
+          <div class="mt-10 flex items-center gap-x-6 lg:mt-0 lg:shrink-0">
+            <.link
+              navigate={~p"/subscribe"}
+              class="rounded-md bg-purple-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
+            >
+              Subscribe
+            </.link>
+            <a href="#" class="text-sm/6 font-semibold text-gray-900">
+              Learn more <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="prose text-left text-sm mb-10">
+        Do you have questions or feedback? <.link href="mailto:greecex@amignosis.com?subject=Questions%20or%20feedback">Let us know</.link>.
       </div>
     </div>
     """
