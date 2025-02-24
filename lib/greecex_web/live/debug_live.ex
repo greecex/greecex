@@ -7,13 +7,32 @@ defmodule GreecexWeb.DebugLive do
     peer_data = get_connect_info(socket, :peer_data)
     x_headers = get_connect_info(socket, :x_headers)
 
-    address = RemoteIp.from(x_headers)
+    address =
+      RemoteIp.from(x_headers, proxies: ["66.241.124.124"])
+
+    address_as_string =
+      cond do
+        address != nil ->
+          address
+          |> Tuple.to_list()
+          |> Enum.join(".")
+
+        true ->
+          peer_data.address |> Tuple.to_list() |> Enum.join(".")
+      end
+
+    # address =
+    #   RemoteIp.from([{"x-forwarded-for", "45.66.42.184, 66.241.124.124"}],
+    #     proxies: ["66.241.124.124"]
+    #   )
+    #   |> Tuple.to_list()
+    #   |> Enum.join(".")
 
     {:ok,
      assign(socket,
        page_title: "Debug",
        peer_data: peer_data,
-       address: address,
+       address: address_as_string,
        x_headers: x_headers
      )}
   end
