@@ -60,7 +60,8 @@ defmodule Greecex.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:earmark, "~> 1.4"},
-      {:hackney, "~> 1.20"}
+      {:hackney, "~> 1.20"},
+      {:hammer, "~> 7.0"}
     ]
   end
 
