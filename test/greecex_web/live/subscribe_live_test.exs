@@ -69,4 +69,33 @@ defmodule GreecexWeb.SubscribeLiveTest do
       assert render(view) =~ "Thank you for subscribing!"
     end
   end
+
+  describe "honeypot" do
+    test "rejects submission when honeypot field is filled", %{conn: conn} do
+      # Mount the LiveView
+      {:ok, view, _html} = live(conn, ~p"/subscribe")
+
+      # Simulate a bot filling the honeypot field
+      bot_params = %{
+        "subscriber" => %{
+          "email" => "bot@example.com",
+          "city" => "Athens",
+          "willing_to_coorganize" => "false",
+          "elixir_experience" => "I am a bot"
+        },
+        # Honeypot triggered
+        "website" => "bot-filled-value"
+      }
+
+      # Submit the form
+      result = render_submit(view, "subscribe", bot_params)
+
+      # Assert the honeypot error is shown
+      assert result =~ "It seems like you&#39;re a bot. If not, please try again."
+      # Form is still visible
+      assert result =~ "subscribe-form"
+      # Success message not shown
+      refute result =~ "Thank you for subscribing"
+    end
+  end
 end

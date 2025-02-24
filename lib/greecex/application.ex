@@ -16,6 +16,7 @@ defmodule Greecex.Application do
       {Finch, name: Greecex.Finch},
       # Start a worker by calling: Greecex.Worker.start_link(arg)
       # {Greecex.Worker, arg},
+      Greecex.RateLimit,
       # Start to serve requests, typically the last entry
       GreecexWeb.Endpoint
     ]
