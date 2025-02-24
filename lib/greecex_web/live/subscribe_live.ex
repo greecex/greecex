@@ -9,6 +9,7 @@ defmodule GreecexWeb.SubscribeLive do
 
     {:ok,
      assign(socket,
+       page_title: "Subscribe",
        changeset: changeset,
        success: false,
        show: true,

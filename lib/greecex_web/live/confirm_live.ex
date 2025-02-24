@@ -5,10 +5,10 @@ defmodule GreecexWeb.ConfirmLive do
   def mount(%{"token" => token}, _session, socket) do
     case Subscribers.confirm_subscriber(token) do
       {:ok, _subscriber} ->
-        {:ok, assign(socket, :status, :confirmed)}
+        {:ok, assign(socket, page_title: "Confirm subscription", status: :confirmed)}
 
       {:error, _reason} ->
-        {:ok, assign(socket, :status, :invalid)}
+        {:ok, assign(socket, page_title: "Confirm subscription", status: :invalid)}
     end
   end
 
