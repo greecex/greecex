@@ -79,6 +79,16 @@
           >
             Contact
           </a>
+          <%= if @current_user do %>
+            {@current_user.email}
+            <.link
+              href={~p"/users/log_out"}
+              method="delete"
+              class="underline text-gray-600 hover:text-gray-900"
+            >
+              Log out
+            </.link>
+          <% end %>
         </nav>
         <div class="mt-16 flex justify-center gap-x-8">
           <a href="https://x.com/amiridis" class="text-gray-600 hover:text-gray-800">

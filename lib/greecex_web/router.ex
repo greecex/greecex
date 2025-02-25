@@ -75,6 +75,10 @@ defmodule GreecexWeb.Router do
       on_mount: [{GreecexWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+
+      scope "/admin", Admin do
+        live "/dashboard", DashboardLive
+      end
     end
   end
 
