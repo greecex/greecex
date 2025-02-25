@@ -60,6 +60,17 @@ defmodule Greecex.Subscribers do
     end
   end
 
+  def list_subscribers do
+    Repo.all(from s in Subscriber, order_by: [desc: s.inserted_at])
+  end
+
+  def get_subscription_confirmation_url(subscriber) do
+    confirmation_url =
+      Phoenix.VerifiedRoutes.url(~p"/confirm/#{subscriber.confirmation_token}")
+
+    confirmation_url
+  end
+
   defp send_confirmation_email(subscriber) do
     confirmation_url =
       Phoenix.VerifiedRoutes.url(~p"/confirm/#{subscriber.confirmation_token}")

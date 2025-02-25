@@ -350,4 +350,7 @@ defmodule Greecex.Accounts do
       {:error, :user, changeset, _} -> {:error, changeset}
     end
   end
+
+  def admin?(%Greecex.Accounts.User{role: "admin"}), do: true
+  def admin?(_), do: false
 end
