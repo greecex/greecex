@@ -2,10 +2,11 @@ defmodule GreecexWeb.Admin.DashboardLive do
   use GreecexWeb, :live_view
 
   alias Greecex.Subscribers
+  alias Greecex.Accounts
 
   @impl true
   def mount(_params, _session, socket) do
-    if admin?(socket.assigns.current_user) do
+    if Accounts.admin?(socket.assigns.current_user) do
       subscribers = Subscribers.list_subscribers()
       count = Enum.count(subscribers)
       {:ok, assign(socket, subscribers: subscribers, count: count)}
@@ -49,7 +50,4 @@ defmodule GreecexWeb.Admin.DashboardLive do
     </div>
     """
   end
-
-  defp admin?(%Greecex.Accounts.User{role: "admin"}), do: true
-  defp admin?(_), do: false
 end
