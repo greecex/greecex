@@ -123,7 +123,7 @@ defmodule GreecexWeb.SubscribeLive do
     else
       key = "subscription:#{socket.assigns.client_ip}"
 
-      case Greecex.RateLimit.hit(key, :timer.hours(1), 5) do
+      case Greecex.RateLimit.hit(key, :timer.hours(1), 8) do
         {:allow, _count} ->
           case Subscribers.create_subscriber(subscriber_params) do
             {:ok, _subscriber} ->

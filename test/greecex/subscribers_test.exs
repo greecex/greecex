@@ -7,6 +7,10 @@ defmodule Greecex.SubscribersTest do
   import Swoosh.TestAssertions
   use Phoenix.VerifiedRoutes, endpoint: GreecexWeb.Endpoint, router: GreecexWeb.Router
 
+  def setup do
+    :ets.delete_all_objects(Greecex.RateLimit)
+  end
+
   describe "create_subscriber/1" do
     @valid_attrs %{
       "email" => "test@example.com",

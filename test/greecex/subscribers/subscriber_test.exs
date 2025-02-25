@@ -3,6 +3,10 @@ defmodule Greecex.Subscribers.SubscriberTest do
 
   alias Greecex.Subscribers.Subscriber
 
+  def setup do
+    :ets.delete_all_objects(Greecex.RateLimit)
+  end
+
   describe "changeset/2" do
     @valid_attrs %{
       email: "test@example.com",
