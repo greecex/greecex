@@ -88,6 +88,14 @@
             >
               Log out
             </.link>
+            <%= if Greecex.Accounts.admin?(@current_user) do %>
+              <.link
+                navigate={~p"/admin/dashboard"}
+                class="underline text-gray-600 hover:text-gray-900"
+              >
+                Dashboard
+              </.link>
+            <% end %>
           <% end %>
         </nav>
         <div class="mt-16 flex justify-center gap-x-8">
