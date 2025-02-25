@@ -3,6 +3,10 @@ defmodule GreecexWeb.ConfirmLiveTest do
   alias Greecex.Subscribers
   import Phoenix.LiveViewTest
 
+  def setup do
+    :ets.delete_all_objects(Greecex.RateLimit)
+  end
+
   describe "ConfirmLive" do
     test "confirms a subscriber with a valid token", %{conn: conn} do
       {:ok, subscriber} =

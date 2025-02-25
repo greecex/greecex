@@ -4,6 +4,10 @@ defmodule GreecexWeb.SubscribeLiveTest do
   import Phoenix.LiveViewTest
 
   describe "SubscribeLive" do
+    def setup do
+      :ets.delete_all_objects(Greecex.RateLimit)
+    end
+
     test "renders form", %{conn: conn} do
       {:ok, _view, html} = live(conn, ~p"/subscribe")
       assert html =~ "Subscribe"
@@ -102,13 +106,6 @@ defmodule GreecexWeb.SubscribeLiveTest do
   describe "Rate limit" do
     test "rejects submission when rate limit is exceeded", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/subscribe")
-      # Matches test env
-      client_ip = "127.0.0.1"
-      key = "subscription:#{client_ip}"
-
-      for _ <- 1..5 do
-        Greecex.RateLimit.hit(key, :timer.hours(1), 5)
-      end
 
       params = %{
         "subscriber" => %{
@@ -120,6 +117,10 @@ defmodule GreecexWeb.SubscribeLiveTest do
         "website" => ""
       }
 
+      for _ <- 1..8 do
+        render_submit(view, "subscribe", params)
+      end
+
       result = render_submit(view, "subscribe", params)
 
       assert result =~ "Too many requests. Try again in a bit."
@@ -127,6 +128,7 @@ defmodule GreecexWeb.SubscribeLiveTest do
       refute result =~ "Thank you for subscribing"
 
       on_exit(fn ->
+        # Clean up the rate limit key after the test
         :ets.delete_all_objects(Greecex.RateLimit)
       end)
     end
