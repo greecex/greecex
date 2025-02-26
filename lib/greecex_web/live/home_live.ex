@@ -28,7 +28,7 @@ defmodule GreecexWeb.HomeLive do
         </.link>
       </div>
 
-      <div class="mt-8 text-left space-y-4">
+      <div class="mt-8 space-y-4">
         <h2 class="text-base font-semibold text-gray-900">
           Why subscribe to updates?
         </h2>
