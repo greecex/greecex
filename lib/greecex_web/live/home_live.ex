@@ -106,14 +106,14 @@ defmodule GreecexWeb.HomeLive do
           <h2 class="max-w-2xl text-2xl font-semibold tracking-tight text-gray-900 sm:text-xl">
             Feeling major FOMO right? <br />Let's build the community together.
           </h2>
-          <div class="mt-10 flex items-center justify-center gap-x-6 lg:mt-0 lg:shrink-0">
+          <div class="mt-8 flex flex-col items-center justify-center gap-y-2 gap-x-6 lg:mt-0 lg:shrink-0">
             <.link
               navigate={~p"/subscribe"}
               class="rounded-md bg-purple-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
             >
               Do it!
             </.link>
-            <.link navigate={~p"/about"} class="text-sm/6 font-semibold text-gray-900">
+            <.link navigate={~p"/about"} class="text-sm/6 text-gray-600">
               Learn more <span aria-hidden="true">→</span>
             </.link>
           </div>
