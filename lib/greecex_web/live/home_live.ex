@@ -19,7 +19,7 @@ defmodule GreecexWeb.HomeLive do
         streamline development by reducing context switching.
       </p>
 
-      <div class="mt-12 mb-12 text-center space-y-4">
+      <div class="mt-4 mb-12 text-center space-y-4">
         <.link
           navigate={~p"/subscribe"}
           class="rounded-md bg-purple-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
