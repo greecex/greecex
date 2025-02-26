@@ -7,7 +7,7 @@ defmodule GreecexWeb.HomeLive do
 
   def render(assigns) do
     ~H"""
-    <div class="max-w-3xl mx-auto text-center px-6">
+    <div class="max-w-3xl mx-auto text-center">
       <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
         Elixir is amazing!
       </h1>
