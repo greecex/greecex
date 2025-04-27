@@ -17,7 +17,7 @@ defmodule Mix.Tasks.Greecex.Context do
 
     latest_zip = find_latest_zip() || "[your-uploaded-file.zip]"
 
-    Mix.shell().info("""
+    output = """
 
     ---
     Uploaded: #{latest_zip}
@@ -28,7 +28,20 @@ defmodule Mix.Tasks.Greecex.Context do
 
     Special Constraints: #{special_constraints}
     ---
-    """)
+    """
+
+    Mix.shell().info(output)
+
+    maybe_copy_to_clipboard(output)
+  end
+
+  defp maybe_copy_to_clipboard(output) do
+    if Code.ensure_loaded?(Clipboard) and function_exported?(Clipboard, :copy, 1) do
+      _ = apply(Clipboard, :copy, [output])
+      Mix.shell().info("\n✅ Copied to clipboard!")
+    else
+      Mix.shell().info("\n⚠️ Clipboard not available, skipping copy.")
+    end
   end
 
   defp prompt(question) do
