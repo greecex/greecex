@@ -26,12 +26,17 @@ defmodule Mix.Tasks.Greecex.Zip do
       Path.wildcard("**", match_dot: true)
       |> Enum.reject(&excluded?/1)
 
-    :ok =
-      :zip.create(String.to_charlist(zip_file), Enum.map(entries, &String.to_charlist/1), [
-        :memory
-      ])
+    case :zip.create(
+           String.to_charlist(zip_file),
+           Enum.map(entries, &String.to_charlist/1),
+           [:cooked, {:compress, :all}]
+         ) do
+      {:ok, _zip_file_path} ->
+        Mix.shell().info("Created #{zip_file} with #{length(entries)} files.")
 
-    Mix.shell().info("Created #{zip_file} with #{length(entries)} files.")
+      {:error, reason} ->
+        Mix.raise("Failed to create zip: #{inspect(reason)}")
+    end
   end
 
   defp excluded?(path) do
