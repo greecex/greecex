@@ -32,7 +32,10 @@ defmodule Mix.Tasks.Greecex.Zip do
            [:cooked, {:compress, :all}]
          ) do
       {:ok, _zip_file_path} ->
-        Mix.shell().info("Created #{zip_file} with #{length(entries)} files.")
+        {:ok, info} = File.stat(zip_file)
+        size_mb = Float.round(info.size / 1_048_576, 2)
+
+        Mix.shell().info("Created #{zip_file} (#{size_mb} MB) with #{length(entries)} files.")
 
       {:error, reason} ->
         Mix.raise("Failed to create zip: #{inspect(reason)}")
