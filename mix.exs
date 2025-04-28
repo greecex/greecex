@@ -62,7 +62,8 @@ defmodule Greecex.MixProject do
       {:earmark, "~> 1.4"},
       {:hackney, "~> 1.20"},
       {:hammer, "~> 7.0"},
-      {:remote_ip, "~> 1.2"}
+      {:remote_ip, "~> 1.2"},
+      {:clipboard, "~> 0.2", only: :dev}
     ]
   end
 
