@@ -20,11 +20,13 @@ import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
+import {hooks as colocatedHooks} from "phoenix-colocated/greecex"
 import topbar from "../vendor/topbar"
 
-let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {
+const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
+  hooks: {...colocatedHooks},
   params: {_csrf_token: csrfToken}
 })
 
