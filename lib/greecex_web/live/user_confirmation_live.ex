@@ -5,6 +5,7 @@ defmodule GreecexWeb.UserConfirmationLive do
 
   def render(%{live_action: :edit} = assigns) do
     ~H"""
+    <Layouts.app flash={@flash}>
     <div class="mx-auto max-w-sm">
       <.header class="text-center">Confirm Account</.header>
 
@@ -20,6 +21,7 @@ defmodule GreecexWeb.UserConfirmationLive do
         | <.link href={~p"/users/log_in"}>Log in</.link>
       </p>
     </div>
+    </Layouts.app>
     """
   end
 

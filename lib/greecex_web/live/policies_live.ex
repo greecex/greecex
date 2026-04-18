@@ -7,6 +7,7 @@ defmodule GreecexWeb.PoliciesLive do
 
   def render(assigns) do
     ~H"""
+    <Layouts.app flash={@flash}>
     <div class="prose">
       <h1>Policies</h1>
       <ul>
@@ -19,6 +20,7 @@ defmodule GreecexWeb.PoliciesLive do
         </li>
       </ul>
     </div>
+    </Layouts.app>
     """
   end
 end

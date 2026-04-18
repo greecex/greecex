@@ -5,6 +5,7 @@ defmodule GreecexWeb.UserConfirmationInstructionsLive do
 
   def render(assigns) do
     ~H"""
+    <Layouts.app flash={@flash}>
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
         No confirmation instructions received?
@@ -25,6 +26,7 @@ defmodule GreecexWeb.UserConfirmationInstructionsLive do
         | <.link href={~p"/users/log_in"}>Log in</.link>
       </p>
     </div>
+    </Layouts.app>
     """
   end
 

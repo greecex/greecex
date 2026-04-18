@@ -82,7 +82,7 @@
           >
             Contact
           </a>
-          <%= if @current_user do %>
+          <span :if={@current_user}>
             {@current_user.email}
             <.link
               href={~p"/users/log_out"}
@@ -91,15 +91,14 @@
             >
               Log out
             </.link>
-            <%= if Greecex.Accounts.admin?(@current_user) do %>
-              <.link
-                navigate={~p"/admin/dashboard"}
-                class="underline text-gray-600 hover:text-gray-900"
-              >
-                Dashboard
-              </.link>
-            <% end %>
-          <% end %>
+            <.link
+              :if={Greecex.Accounts.admin?(@current_user)}
+              navigate={~p"/admin/dashboard"}
+              class="underline text-gray-600 hover:text-gray-900"
+            >
+              Dashboard
+            </.link>
+          </span>
         </nav>
         <div class="mt-16 flex justify-center gap-x-8">
           <a href="https://x.com/amiridis" class="text-gray-600 hover:text-gray-800">

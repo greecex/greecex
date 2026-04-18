@@ -6,6 +6,7 @@ defmodule GreecexWeb.UserRegistrationLive do
 
   def render(assigns) do
     ~H"""
+    <Layouts.app flash={@flash}>
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
         Register for an account
@@ -39,6 +40,7 @@ defmodule GreecexWeb.UserRegistrationLive do
         </:actions>
       </.simple_form>
     </div>
+    </Layouts.app>
     """
   end
 

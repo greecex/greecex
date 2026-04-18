@@ -18,6 +18,7 @@ defmodule GreecexWeb.Admin.DashboardLive do
   @impl true
   def render(assigns) do
     ~H"""
+    <Layouts.app flash={@flash}>
     <div class="prose">
       <h1>Admin dashboard</h1>
       <p>Welcome to the admin dashboard!</p>
@@ -48,6 +49,7 @@ defmodule GreecexWeb.Admin.DashboardLive do
         <% end %>
       </ul>
     </div>
+    </Layouts.app>
     """
   end
 end

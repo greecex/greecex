@@ -7,6 +7,7 @@ defmodule GreecexWeb.HomeLive do
 
   def render(assigns) do
     ~H"""
+    <Layouts.app flash={@flash}>
     <div class="max-w-3xl mx-auto text-center">
       <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
         Elixir is amazing!
@@ -124,6 +125,7 @@ defmodule GreecexWeb.HomeLive do
         Do you have questions or feedback? <.link href="mailto:greecex@amignosis.com?subject=Questions%20or%20feedback">Let us know</.link>.
       </div>
     </div>
+    </Layouts.app>
     """
   end
 end

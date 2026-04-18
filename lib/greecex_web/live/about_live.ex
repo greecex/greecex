@@ -26,9 +26,11 @@ defmodule GreecexWeb.AboutLive do
 
   def render(assigns) do
     ~H"""
-    <div class="prose">
-      {raw(@html)}
-    </div>
+    <Layouts.app flash={@flash}>
+      <div class="prose">
+        {raw(@html)}
+      </div>
+    </Layouts.app>
     """
   end
 end
