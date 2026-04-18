@@ -9,7 +9,12 @@ defmodule GreecexWeb.Router do
     plug :fetch_live_flash
     plug :put_root_layout, html: {GreecexWeb.Layouts, :root}
     plug :protect_from_forgery
-    plug :put_secure_browser_headers
+    plug :put_secure_browser_headers, %{
+      "content-security-policy" =>
+        "default-src 'self'; script-src 'self' https://plausible.io; " <>
+          "connect-src 'self' https://plausible.io; " <>
+          "base-uri 'self'; frame-ancestors 'self';"
+    }
     plug :fetch_current_user
   end
 

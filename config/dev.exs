@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :greecex, Greecex.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "workbrew",
+  password: "",
   hostname: "localhost",
   database: "greecex_dev",
   stacktrace: true,

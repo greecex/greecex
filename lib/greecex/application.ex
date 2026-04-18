@@ -12,8 +12,6 @@ defmodule Greecex.Application do
       Greecex.Repo,
       {DNSCluster, query: Application.get_env(:greecex, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Greecex.PubSub},
-      # Start the Finch HTTP client for sending emails
-      {Finch, name: Greecex.Finch},
       # Start a worker by calling: Greecex.Worker.start_link(arg)
       # {Greecex.Worker, arg},
       Greecex.RateLimit,
