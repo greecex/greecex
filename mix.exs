@@ -80,7 +80,7 @@ defmodule Greecex.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind greecex", "esbuild greecex"],
+      "assets.build": ["compile" | Enum.map(~w(tailwind esbuild), &"#{&1} greecex")],
       "assets.deploy": [
         "tailwind greecex --minify",
         "esbuild greecex --minify",

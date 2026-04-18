@@ -36,7 +36,7 @@ config :esbuild,
   version: "0.25.4",
   greecex: [
     args:
-      ~w(js/app.js --bundle --target=es2022 --alias:@=. --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+      ~w(js/app.js --bundle --target=es2022 --alias:@=. --outdir=../priv/static/assets/js --external:/fonts/* --external:/images/*),
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => [Path.expand("../deps", __DIR__), Mix.Project.build_path()]}
   ]
@@ -47,7 +47,7 @@ config :tailwind,
   greecex: [
     args: ~w(
       --input=assets/css/app.css
-      --output=priv/static/assets/app.css
+      --output=priv/static/assets/css/app.css
     ),
     cd: Path.expand("..", __DIR__)
   ]
