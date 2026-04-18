@@ -83,6 +83,7 @@ defmodule Greecex.MixProject do
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["compile" | Enum.map(~w(tailwind esbuild), &"#{&1} greecex")],
       "assets.deploy": [
+        "compile",
         "tailwind greecex --minify",
         "esbuild greecex --minify",
         "phx.digest"
