@@ -14,9 +14,10 @@ defmodule Greecex.MixProject do
     ]
   end
 
-  # Configuration for the OTP application.
-  #
-  # Type `mix help compile.app` for more information.
+  def cli do
+    [preferred_envs: [precommit: :test]]
+  end
+
   def application do
     [
       mod: {Greecex.Application, []},
@@ -85,7 +86,8 @@ defmodule Greecex.MixProject do
         "tailwind greecex --minify",
         "esbuild greecex --minify",
         "phx.digest"
-      ]
+      ],
+      precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]
     ]
   end
 end
