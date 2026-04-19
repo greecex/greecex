@@ -1,0 +1,85 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: greecex_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      MIX_ENV: test
+      DATABASE_URL: ecto://postgres:postgres@localhost/greecex_test
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          persist-credentials: false
+      - uses: erlef/setup-beam@8d44588995e53ce789721e96227122a67826542d
+        with:
+          otp-version: "28.4.1"
+          elixir-version: "1.19.5"
+      - run: mix deps.get
+      - run: mix test
+
+  build-and-deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-greecex
+      cancel-in-progress: true
+    env:
+      MIX_ENV: prod
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          persist-credentials: false
+      - uses: erlef/setup-beam@8d44588995e53ce789721e96227122a67826542d
+        with:
+          otp-version: "28.4.1"
+          elixir-version: "1.19.5"
+
+      - run: mix deps.get --only prod
+      - run: mix compile
+      - run: mix assets.deploy
+      - run: mix release
+
+      - name: Package release
+        run: tar czf greecex.tar.gz -C _build/prod/rel/greecex .
+
+      - name: Deploy to VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$VPS_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
+          SSH_OPTS="-i ~/.ssh/deploy_key"
+
+          scp $SSH_OPTS greecex.tar.gz deploy@"$VPS_HOST":/tmp/greecex.tar.gz
+
+          ssh $SSH_OPTS deploy@"$VPS_HOST" bash <<'REMOTE'
+            set -euo pipefail
+            sudo systemctl stop greecex
+            rm -rf /opt/greecex/bin /opt/greecex/lib /opt/greecex/erts-* /opt/greecex/releases
+            tar xzf /tmp/greecex.tar.gz -C /opt/greecex
+            set -a; source /opt/greecex/.env; set +a
+            /opt/greecex/bin/migrate
+            sudo systemctl start greecex
+            rm /tmp/greecex.tar.gz
+          REMOTE
