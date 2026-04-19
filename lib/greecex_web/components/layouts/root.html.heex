@@ -82,23 +82,22 @@
           >
             Contact
           </a>
-          <span :if={@current_user}>
-            {@current_user.email}
-            <.link
-              href={~p"/users/log_out"}
-              method="delete"
-              class="underline text-gray-600 hover:text-gray-900"
-            >
-              Log out
-            </.link>
-            <.link
-              :if={Greecex.Accounts.admin?(@current_user)}
-              navigate={~p"/admin/dashboard"}
-              class="underline text-gray-600 hover:text-gray-900"
-            >
-              Dashboard
-            </.link>
-          </span>
+          <span :if={@current_user} class="text-gray-600">{@current_user.email}</span>
+          <.link
+            :if={@current_user}
+            href={~p"/users/log_out"}
+            method="delete"
+            class="underline text-gray-600 hover:text-gray-900"
+          >
+            Log out
+          </.link>
+          <.link
+            :if={@current_user && Greecex.Accounts.admin?(@current_user)}
+            navigate={~p"/admin/dashboard"}
+            class="underline text-gray-600 hover:text-gray-900"
+          >
+            Dashboard
+          </.link>
         </nav>
         <div class="mt-16 flex justify-center gap-x-8">
           <a href="https://x.com/amiridis" class="text-gray-600 hover:text-gray-800">
