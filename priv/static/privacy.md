@@ -31,10 +31,9 @@ We **never** sell or share your data beyond the services listed below, and we on
 
 We rely on GDPR-compliant services to operate Greece |> Elixir:
 
-- **Fly.io** – Hosts our app. See their [privacy policy](https://fly.io/legal/privacy-policy/).
+- **Hetzner** – Hosts our app and database on a VPS in Germany. See their [privacy policy](https://www.hetzner.com/legal/privacy-policy/).
 - **Mailgun** – Sends our emails. See their [privacy policy](https://www.mailgun.com/legal/privacy-policy/).
 - **Plausible** – Provides privacy-focused analytics (no cookies, no personal data). See their [data policy](https://plausible.io/data-policy).
-- **Supabase** – Hosts our Postgres database. See their [privacy policy](https://supabase.com/privacy).
 
 ## Your rights
 
@@ -52,7 +51,7 @@ We retain your data as long as you are subscribed. If you unsubscribe, we delete
 
 ## Data storage & security
 
-Your data is securely stored in our **Supabase Postgres database**, hosted via **Fly.io**. We take reasonable measures to protect it and do not share it beyond the services listed above.
+Your data is securely stored in our **PostgreSQL database**, hosted on a **Hetzner VPS in Germany**. We take reasonable measures to protect it and do not share it beyond the services listed above.
 
 ## Open source note
 

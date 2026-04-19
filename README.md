@@ -10,8 +10,8 @@ This is an Elixir Phoenix LiveView web site for the [Greece |> Elixir](https://g
 | [Phoenix](https://www.phoenixframework.org) | Web framework for the Elixir programming language |
 | [Phoenix LiveView](https://hexdocs.pm/phoenix_live_view/welcome.html) | Rich, real-time user experiences with server-rendered HTML |
 | [Tailwind CSS](https://tailwindcss.com) | A utility-first CSS framework |
-| [Fly.io](https://fly.io) | A public cloud built for developers who ship |
-| [Supabase](https://supabase.com) | The Postgres database |
+| [Hetzner](https://www.hetzner.com) | VPS hosting |
+| [PostgreSQL](https://www.postgresql.org) | The database |
 | [Plausible](https://plausible.io) | Analytics |
 | [Mailgun](https://www.mailgun.com) | Sending email |
 
