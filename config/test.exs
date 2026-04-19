@@ -9,6 +9,7 @@ config :bcrypt_elixir, :log_rounds, 1
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :greecex, Greecex.Repo,
+  url: System.get_env("DATABASE_URL"),
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
