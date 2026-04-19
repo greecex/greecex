@@ -5,17 +5,19 @@ defmodule Greecex.MixProject do
     [
       app: :greecex,
       version: "0.1.0",
-      elixir: "~> 1.14",
+      elixir: "~> 1.19",
       elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: [:phoenix_live_view] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
     ]
   end
 
-  # Configuration for the OTP application.
-  #
-  # Type `mix help compile.app` for more information.
+  def cli do
+    [preferred_envs: [precommit: :test]]
+  end
+
   def application do
     [
       mod: {Greecex.Application, []},
@@ -33,34 +35,33 @@ defmodule Greecex.MixProject do
   defp deps do
     [
       {:bcrypt_elixir, "~> 3.0"},
-      {:phoenix, "~> 1.7.19"},
+      {:phoenix, "~> 1.8.5"},
       {:phoenix_ecto, "~> 4.5"},
-      {:ecto_sql, "~> 3.10"},
+      {:ecto_sql, "~> 3.13"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.1"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 1.0.0"},
-      {:floki, ">= 0.30.0", only: :test},
-      {:phoenix_live_dashboard, "~> 0.8.3"},
-      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
+      {:phoenix_live_reload, "~> 1.5", only: :dev},
+      {:phoenix_live_view, "~> 1.1"},
+      {:lazy_html, ">= 0.1.0", only: :test},
+      {:phoenix_live_dashboard, "~> 0.8.6"},
+      {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
       {:heroicons,
        github: "tailwindlabs/heroicons",
-       tag: "v2.1.1",
+       tag: "v2.2.0",
        sparse: "optimized",
        app: false,
        compile: false,
        depth: 1},
-      {:swoosh, "~> 1.5"},
-      {:finch, "~> 0.13"},
+      {:swoosh, "~> 1.16"},
+      {:req, "~> 0.5"},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.26"},
+      {:gettext, "~> 1.0"},
       {:jason, "~> 1.2"},
-      {:dns_cluster, "~> 0.1.1"},
+      {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
       {:earmark, "~> 1.4"},
-      {:hackney, "~> 1.20"},
       {:hammer, "~> 7.0"},
       {:remote_ip, "~> 1.2"},
       {:clipboard, "~> 0.2", only: :dev}
@@ -80,12 +81,14 @@ defmodule Greecex.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind greecex", "esbuild greecex"],
+      "assets.build": ["compile" | Enum.map(~w(tailwind esbuild), &"#{&1} greecex")],
       "assets.deploy": [
+        "compile",
         "tailwind greecex --minify",
         "esbuild greecex --minify",
         "phx.digest"
-      ]
+      ],
+      precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]
     ]
   end
 end

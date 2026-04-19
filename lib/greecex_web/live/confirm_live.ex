@@ -14,12 +14,14 @@ defmodule GreecexWeb.ConfirmLive do
 
   def render(assigns) do
     ~H"""
-    <%= case @status do %>
-      <% :confirmed -> %>
-        <p>Thank you for confirming your subscription!</p>
-      <% :invalid -> %>
-        <p>Sorry, that confirmation link is invalid or has expired.</p>
-    <% end %>
+    <Layouts.app flash={@flash}>
+      <%= case @status do %>
+        <% :confirmed -> %>
+          <p>Thank you for confirming your subscription!</p>
+        <% :invalid -> %>
+          <p>Sorry, that confirmation link is invalid or has expired.</p>
+      <% end %>
+    </Layouts.app>
     """
   end
 end

@@ -11,14 +11,14 @@
 #   - https://pkgs.org/ - resource for finding needed packages
 #   - Ex: hexpm/elixir:1.18.2-erlang-27.2.2-debian-bullseye-20250203-slim
 #
-ARG ELIXIR_VERSION=1.18.2
-ARG OTP_VERSION=27.2.2
-ARG DEBIAN_VERSION=bullseye-20250203-slim
+ARG ELIXIR_VERSION=1.19.5
+ARG OTP_VERSION=28.4.1
+ARG DEBIAN_VERSION=bullseye-20260406-slim
 
 ARG BUILDER_IMAGE="hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-${DEBIAN_VERSION}"
 ARG RUNNER_IMAGE="debian:${DEBIAN_VERSION}"
 
-FROM ${BUILDER_IMAGE} as builder
+FROM ${BUILDER_IMAGE} AS builder
 
 # install build dependencies
 RUN apt-get update -y && apt-get install -y build-essential git \
@@ -51,11 +51,11 @@ COPY lib lib
 
 COPY assets assets
 
+# Compile the release (must run before assets.deploy for colocated hooks)
+RUN mix compile
+
 # compile assets
 RUN mix assets.deploy
-
-# Compile the release
-RUN mix compile
 
 # Changes to config/runtime.exs don't require recompiling the code
 COPY config/runtime.exs config/

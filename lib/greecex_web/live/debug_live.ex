@@ -39,6 +39,7 @@ defmodule GreecexWeb.DebugLive do
 
   def render(assigns) do
     ~H"""
+    <Layouts.app flash={@flash}>
     <div class="prose">
       <h1>Debug</h1>
       <h3>Peer data:</h3>
@@ -58,6 +59,7 @@ defmodule GreecexWeb.DebugLive do
         <li>{inspect(@address)}</li>
       </ul>
     </div>
+    </Layouts.app>
     """
   end
 end

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="[scrollbar-gutter:stable]">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -23,16 +23,16 @@
     <.live_title default="Greece |> Elixir" suffix=" · Greece |> Elixir">
       {assigns[:page_title]}
     </.live_title>
-    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
-    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+    <link phx-track-static rel="stylesheet" href={~p"/assets/css/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/js/app.js"}>
     </script>
     <script defer data-domain="greecex.org" src="https://plausible.io/js/script.js">
     </script>
   </head>
 
-  <body class="bg-white min-h-screen flex flex-col">
+  <body class="bg-base-100 text-base-content min-h-screen flex flex-col">
     <header class="px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col items-center border-b border-zinc-100 py-4 text-sm">
+      <div class="flex flex-col items-center border-b border-base-300 py-4 text-sm">
         <a href="/" class="relative w-16 h-16 group">
           <img
             src={~p"/images/elixir-plain.svg"}
@@ -82,24 +82,23 @@
           >
             Contact
           </a>
-          <%= if @current_user do %>
-            {@current_user.email}
-            <.link
-              href={~p"/users/log_out"}
-              method="delete"
-              class="underline text-gray-600 hover:text-gray-900"
-            >
-              Log out
-            </.link>
-            <%= if Greecex.Accounts.admin?(@current_user) do %>
-              <.link
-                navigate={~p"/admin/dashboard"}
-                class="underline text-gray-600 hover:text-gray-900"
-              >
-                Dashboard
-              </.link>
-            <% end %>
-          <% end %>
+          <span :if={@current_user} class="text-gray-300">·</span>
+          <span :if={@current_user} class="text-gray-600">{@current_user.email}</span>
+          <.link
+            :if={@current_user}
+            href={~p"/users/log_out"}
+            method="delete"
+            class="underline text-gray-600 hover:text-gray-900"
+          >
+            Log out
+          </.link>
+          <.link
+            :if={@current_user && Greecex.Accounts.admin?(@current_user)}
+            navigate={~p"/admin/dashboard"}
+            class="underline text-gray-600 hover:text-gray-900"
+          >
+            Dashboard
+          </.link>
         </nav>
         <div class="mt-16 flex justify-center gap-x-8">
           <a href="https://x.com/amiridis" class="text-gray-600 hover:text-gray-800">

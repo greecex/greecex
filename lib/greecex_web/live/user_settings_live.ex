@@ -5,6 +5,7 @@ defmodule GreecexWeb.UserSettingsLive do
 
   def render(assigns) do
     ~H"""
+    <Layouts.app flash={@flash}>
     <.header class="text-center">
       Account Settings
       <:subtitle>Manage your account email address and password settings</:subtitle>
@@ -70,6 +71,7 @@ defmodule GreecexWeb.UserSettingsLive do
         </.simple_form>
       </div>
     </div>
+    </Layouts.app>
     """
   end
 

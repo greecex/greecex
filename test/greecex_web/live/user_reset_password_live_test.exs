@@ -93,7 +93,7 @@ defmodule GreecexWeb.UserResetPasswordLiveTest do
 
       {:ok, conn} =
         lv
-        |> element(~s|a:fl-contains("Log in")|)
+        |> element("a", "Log in")
         |> render_click()
         |> follow_redirect(conn, ~p"/users/log_in")
 
@@ -108,7 +108,7 @@ defmodule GreecexWeb.UserResetPasswordLiveTest do
 
       {:ok, conn} =
         lv
-        |> element(~s|a:fl-contains("Register")|)
+        |> element("a", "Register")
         |> render_click()
         |> follow_redirect(conn, ~p"/users/register")
 

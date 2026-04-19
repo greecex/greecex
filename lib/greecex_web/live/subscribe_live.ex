@@ -42,6 +42,7 @@ defmodule GreecexWeb.SubscribeLive do
 
   def render(assigns) do
     ~H"""
+    <Layouts.app flash={@flash}>
     <div class="max-w-3xl mx-auto text-center px-6">
       <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
         Subscribe for updates
@@ -94,6 +95,7 @@ defmodule GreecexWeb.SubscribeLive do
         Thank you for subscribing! Please check your email for confirmation.
       </p>
     <% end %>
+    </Layouts.app>
     """
   end
 

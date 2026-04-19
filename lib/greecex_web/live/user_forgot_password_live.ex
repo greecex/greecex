@@ -5,6 +5,7 @@ defmodule GreecexWeb.UserForgotPasswordLive do
 
   def render(assigns) do
     ~H"""
+    <Layouts.app flash={@flash}>
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
         Forgot your password?
@@ -24,6 +25,7 @@ defmodule GreecexWeb.UserForgotPasswordLive do
         | <.link href={~p"/users/log_in"}>Log in</.link>
       </p>
     </div>
+    </Layouts.app>
     """
   end
 
