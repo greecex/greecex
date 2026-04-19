@@ -82,6 +82,7 @@
           >
             Contact
           </a>
+          <span :if={@current_user} class="text-gray-300">·</span>
           <span :if={@current_user} class="text-gray-600">{@current_user.email}</span>
           <.link
             :if={@current_user}
