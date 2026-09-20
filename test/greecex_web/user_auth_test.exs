@@ -1,9 +1,9 @@
 defmodule GreecexWeb.UserAuthTest do
   use GreecexWeb.ConnCase, async: true
 
-  alias Phoenix.LiveView
   alias Greecex.Accounts
   alias GreecexWeb.UserAuth
+  alias Phoenix.LiveView
   import Greecex.AccountsFixtures
 
   @remember_me_cookie "_greecex_web_user_remember_me"

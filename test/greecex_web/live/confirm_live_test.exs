@@ -1,5 +1,5 @@
 defmodule GreecexWeb.ConfirmLiveTest do
-  use GreecexWeb.ConnCase
+  use GreecexWeb.ConnCase, async: true
   alias Greecex.Subscribers
   import Phoenix.LiveViewTest
 

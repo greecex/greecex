@@ -1,4 +1,10 @@
 defmodule Greecex.Accounts.UserNotifier do
+  @moduledoc """
+  Account email for the admin side: confirmation, reset and email changes.
+
+  Subscriber-facing mail lives in `Greecex.Subscribers.SubscriberNotifier`,
+  since the two audiences have nothing in common.
+  """
   import Swoosh.Email
 
   alias Greecex.Mailer

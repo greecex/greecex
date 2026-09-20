@@ -1,7 +1,10 @@
 defmodule Greecex.AccountsFixtures do
   @moduledoc """
-  This module defines test helpers for creating
-  entities via the `Greecex.Accounts` context.
+  Builders for user records and the tokens that authenticate them.
+
+  These go through `Greecex.Accounts` rather than inserting rows directly,
+  so a fixture stops compiling rather than silently drifting when the
+  changeset rules change.
   """
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"

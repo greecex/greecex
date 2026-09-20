@@ -11,14 +11,10 @@ defmodule GreecexWeb.DebugLive do
       RemoteIp.from(x_headers, proxies: ["66.241.124.124"])
 
     address_as_string =
-      cond do
-        address != nil ->
-          address
-          |> Tuple.to_list()
-          |> Enum.join(".")
-
-        true ->
-          peer_data.address |> Tuple.to_list() |> Enum.join(".")
+      if address do
+        address |> Tuple.to_list() |> Enum.join(".")
+      else
+        peer_data.address |> Tuple.to_list() |> Enum.join(".")
       end
 
     # address =

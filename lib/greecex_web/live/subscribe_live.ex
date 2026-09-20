@@ -17,14 +17,10 @@ defmodule GreecexWeb.SubscribeLive do
       RemoteIp.from(x_headers, proxies: ["66.241.124.124"])
 
     address_as_string =
-      cond do
-        address != nil ->
-          address
-          |> Tuple.to_list()
-          |> Enum.join(".")
-
-        true ->
-          peer_data.address |> Tuple.to_list() |> Enum.join(".")
+      if address do
+        address |> Tuple.to_list() |> Enum.join(".")
+      else
+        peer_data.address |> Tuple.to_list() |> Enum.join(".")
       end
 
     {:ok,
@@ -127,26 +123,7 @@ defmodule GreecexWeb.SubscribeLive do
 
       case Greecex.RateLimit.hit(key, :timer.hours(1), 8) do
         {:allow, _count} ->
-          case Subscribers.create_subscriber(subscriber_params) do
-            {:ok, _subscriber} ->
-              Logger.info(
-                "Subscriber with email #{subscriber_params["email"]} created from #{socket.assigns.client_ip}"
-              )
-
-              {:noreply, assign(socket, success: true, show: false, error: nil)}
-
-            {:error, %Ecto.Changeset{errors: [email: {"has already been taken", _}]}} ->
-              {:noreply, assign(socket, success: true, show: false, error: nil)}
-
-            {:error, changeset} ->
-              {:noreply,
-               assign(socket,
-                 form: to_form(changeset),
-                 error: "Something went wrong. Please try again.",
-                 success: false,
-                 show: true
-               )}
-          end
+          create_subscriber(socket, subscriber_params)
 
         {:deny, _retry_after} ->
           Logger.error("Too many requests from #{socket.assigns.client_ip}")
@@ -183,5 +160,30 @@ defmodule GreecexWeb.SubscribeLive do
       "Volos",
       "Xanthi"
     ]
+  end
+
+  # An already-taken email looks like success on purpose: it keeps the form
+  # from telling a stranger whether an address is on the list.
+  defp create_subscriber(socket, subscriber_params) do
+    case Subscribers.create_subscriber(subscriber_params) do
+      {:ok, _subscriber} ->
+        Logger.info(
+          "Subscriber with email #{subscriber_params["email"]} created from #{socket.assigns.client_ip}"
+        )
+
+        {:noreply, assign(socket, success: true, show: false, error: nil)}
+
+      {:error, %Ecto.Changeset{errors: [email: {"has already been taken", _}]}} ->
+        {:noreply, assign(socket, success: true, show: false, error: nil)}
+
+      {:error, changeset} ->
+        {:noreply,
+         assign(socket,
+           form: to_form(changeset),
+           error: "Something went wrong. Please try again.",
+           success: false,
+           show: true
+         )}
+    end
   end
 end

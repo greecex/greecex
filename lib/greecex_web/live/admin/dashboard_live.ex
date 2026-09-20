@@ -1,8 +1,8 @@
 defmodule GreecexWeb.Admin.DashboardLive do
   use GreecexWeb, :live_view
 
-  alias Greecex.Subscribers
   alias Greecex.Accounts
+  alias Greecex.Subscribers
 
   @impl true
   def mount(_params, _session, socket) do

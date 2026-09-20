@@ -37,6 +37,7 @@ defmodule Mix.Tasks.Greecex.Context do
 
   defp maybe_copy_to_clipboard(output) do
     if Code.ensure_loaded?(Clipboard) and function_exported?(Clipboard, :copy, 1) do
+      # credo:disable-for-next-line Credo.Check.Refactor.Apply
       _ = apply(Clipboard, :copy, [output])
       Mix.shell().info("\n✅ Copied to clipboard!")
     else
