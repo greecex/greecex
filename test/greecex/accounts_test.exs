@@ -1,5 +1,5 @@
 defmodule Greecex.AccountsTest do
-  use Greecex.DataCase
+  use Greecex.DataCase, async: true
 
   alias Greecex.Accounts
 

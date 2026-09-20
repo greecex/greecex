@@ -1,5 +1,5 @@
 defmodule Greecex.Subscribers.SubscriberTest do
-  use Greecex.DataCase
+  use Greecex.DataCase, async: true
 
   alias Greecex.Subscribers.Subscriber
 

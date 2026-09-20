@@ -8,18 +8,18 @@ defmodule GreecexWeb.PoliciesLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash}>
-    <div class="prose">
-      <h1>Policies</h1>
-      <ul>
-        <li><.link navigate={~p"/privacy"}>Privacy</.link></li>
-        <li><.link navigate={~p"/trademark"}>Trademark</.link></li>
-        <li>
-          <.link href="https://github.com/greecex/greecex/blob/main/CODE_OF_CONDUCT.md">
-            Code of Conduct
-          </.link>
-        </li>
-      </ul>
-    </div>
+      <div class="prose">
+        <h1>Policies</h1>
+        <ul>
+          <li><.link navigate={~p"/privacy"}>Privacy</.link></li>
+          <li><.link navigate={~p"/trademark"}>Trademark</.link></li>
+          <li>
+            <.link href="https://github.com/greecex/greecex/blob/main/CODE_OF_CONDUCT.md">
+              Code of Conduct
+            </.link>
+          </li>
+        </ul>
+      </div>
     </Layouts.app>
     """
   end

@@ -6,21 +6,21 @@ defmodule GreecexWeb.UserConfirmationLive do
   def render(%{live_action: :edit} = assigns) do
     ~H"""
     <Layouts.app flash={@flash}>
-    <div class="mx-auto max-w-sm">
-      <.header class="text-center">Confirm Account</.header>
+      <div class="mx-auto max-w-sm">
+        <.header class="text-center">Confirm Account</.header>
 
-      <.simple_form for={@form} id="confirmation_form" phx-submit="confirm_account">
-        <input type="hidden" name={@form[:token].name} value={@form[:token].value} />
-        <:actions>
-          <.button phx-disable-with="Confirming..." class="w-full">Confirm my account</.button>
-        </:actions>
-      </.simple_form>
+        <.simple_form for={@form} id="confirmation_form" phx-submit="confirm_account">
+          <input type="hidden" name={@form[:token].name} value={@form[:token].value} />
+          <:actions>
+            <.button phx-disable-with="Confirming..." class="w-full">Confirm my account</.button>
+          </:actions>
+        </.simple_form>
 
-      <p class="text-center mt-4">
-        <.link href={~p"/users/register"}>Register</.link>
-        | <.link href={~p"/users/log_in"}>Log in</.link>
-      </p>
-    </div>
+        <p class="text-center mt-4">
+          <.link href={~p"/users/register"}>Register</.link>
+          | <.link href={~p"/users/log_in"}>Log in</.link>
+        </p>
+      </div>
     </Layouts.app>
     """
   end
@@ -46,7 +46,7 @@ defmodule GreecexWeb.UserConfirmationLive do
         # by some automation or by the user themselves, so we redirect without
         # a warning message.
         case socket.assigns do
-          %{current_user: %{confirmed_at: confirmed_at}} when not is_nil(confirmed_at) ->
+          %{current_user: %{confirmed_at: confirmed_at}} when is_struct(confirmed_at) ->
             {:noreply, redirect(socket, to: ~p"/")}
 
           %{} ->

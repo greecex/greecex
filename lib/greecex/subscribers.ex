@@ -1,4 +1,10 @@
 defmodule Greecex.Subscribers do
+  @moduledoc """
+  The mailing list: subscribing, confirming, and unsubscribing.
+
+  Separate from `Greecex.Accounts` because a subscriber is an email address
+  with a token, not someone who can log in.
+  """
   import Ecto.Query, warn: false
   alias Greecex.Repo
   alias Greecex.Subscribers.Subscriber

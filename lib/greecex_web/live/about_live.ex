@@ -2,7 +2,7 @@ defmodule GreecexWeb.AboutLive do
   @static_file "about.md"
 
   use GreecexWeb, :live_view
-  alias Earmark
+  alias MDEx
 
   require Logger
 
@@ -16,7 +16,8 @@ defmodule GreecexWeb.AboutLive do
 
     case File.read(file_path) do
       {:ok, content} ->
-        Earmark.as_html!(content)
+        # smart: true matches the typographic quotes Earmark applied by default
+        MDEx.to_html!(content, parse: [smart: true])
 
       {:error, reason} ->
         Logger.error("Failed to load #{@static_file} from #{file_path}: #{inspect(reason)}")

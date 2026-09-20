@@ -1,4 +1,10 @@
 defmodule Greecex.Subscribers.SubscriberNotifier do
+  @moduledoc """
+  Email sent to mailing list subscribers.
+
+  Every message carries an unsubscribe link, which is why these go through
+  here rather than the account notifier.
+  """
   import Swoosh.Email
 
   alias Greecex.Mailer

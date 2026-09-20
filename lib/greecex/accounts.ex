@@ -6,7 +6,7 @@ defmodule Greecex.Accounts do
   import Ecto.Query, warn: false
   alias Greecex.Repo
 
-  alias Greecex.Accounts.{User, UserToken, UserNotifier}
+  alias Greecex.Accounts.{User, UserNotifier, UserToken}
 
   ## Database getters
 

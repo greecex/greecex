@@ -1,20 +1,15 @@
 defmodule Greecex.DataCase do
   @moduledoc """
-  This module defines the setup for tests requiring
-  access to the application's data layer.
+  Test case for anything touching the database.
 
-  You may define functions here to be used as helpers in
-  your tests.
-
-  Finally, if the test case interacts with the database,
-  we enable the SQL sandbox, so changes done to the database
-  are reverted at the end of every test. If you are using
-  PostgreSQL, you can even run database tests asynchronously
-  by setting `use Greecex.DataCase, async: true`, although
-  this option is not recommended for other databases.
+  Each test runs inside a sandboxed transaction that is rolled back after
+  it. Passing `async: true` gives the test its own connection instead of a
+  shared one, which is safe for anything not reaching for global state.
   """
 
   use ExUnit.CaseTemplate
+
+  alias Ecto.Adapters.SQL.Sandbox
 
   using do
     quote do
@@ -36,8 +31,8 @@ defmodule Greecex.DataCase do
   Sets up the sandbox based on the test tags.
   """
   def setup_sandbox(tags) do
-    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(Greecex.Repo, shared: not tags[:async])
-    on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
+    pid = Sandbox.start_owner!(Greecex.Repo, shared: not tags[:async])
+    on_exit(fn -> Sandbox.stop_owner(pid) end)
   end
 
   @doc """

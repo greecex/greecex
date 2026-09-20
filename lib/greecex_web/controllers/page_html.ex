@@ -1,8 +1,9 @@
 defmodule GreecexWeb.PageHTML do
   @moduledoc """
-  This module contains pages rendered by PageController.
+  Templates for the landing page.
 
-  See the `page_html` directory for all templates available.
+  Every other page is a LiveView, so this is one of the few things left
+  rendering through a controller.
   """
   use GreecexWeb, :html
 

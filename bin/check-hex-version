@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+#
+# Fail if the installed Hex is older than 2.5. `mix hex.audit` exists on earlier
+# versions but only checks for retired packages there, so it exits 0 without
+# ever scanning for security advisories. erlef/setup-beam has no input for
+# pinning a Hex version, it just runs `mix local.hex`, so the floor is asserted
+# here and called from both the CI audit job and `mix precommit`.
+#
+# Run locally with: bash bin/check-hex-version
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+required_major=2
+required_minor=5
+
+raw=$(mix hex.info | awk '/^Hex:/ { print $2 }')
+version=${raw%%-*}                      # drop any pre-release suffix
+
+# Guard against an empty or malformed parse. Without this, `[ "" -lt 2 ]` errors
+# inside the comparison below, which an `if` reads as false, and the check would
+# pass while having verified nothing.
+case "$version" in
+  '' | *[!0-9.]*)
+    echo "ERROR: could not read a Hex version from 'mix hex.info' (got '$raw')."
+    exit 1
+    ;;
+esac
+
+major=${version%%.*}
+rest=${version#*.}
+minor=${rest%%.*}
+
+if [ -z "$major" ] || [ -z "$minor" ]; then
+  echo "ERROR: could not parse major and minor from Hex version '$version'."
+  exit 1
+fi
+
+if [ "$major" -lt "$required_major" ] ||
+   { [ "$major" -eq "$required_major" ] && [ "$minor" -lt "$required_minor" ]; }; then
+  echo "Found Hex $version. mix hex.audit reports advisories only on $required_major.$required_minor or later."
+  echo "Upgrade with: mix local.hex"
+  exit 1
+fi
+
+echo "Hex $version reports security advisories."

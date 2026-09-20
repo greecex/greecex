@@ -34,6 +34,8 @@ defmodule Greecex.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:ex_slop, "~> 0.1", only: [:dev, :test], runtime: false},
       {:bcrypt_elixir, "~> 3.0"},
       {:phoenix, "~> 1.8.5"},
       {:phoenix_ecto, "~> 4.5"},
@@ -61,7 +63,7 @@ defmodule Greecex.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
-      {:earmark, "~> 1.4"},
+      {:mdex, "~> 0.9"},
       {:hammer, "~> 7.0"},
       {:remote_ip, "~> 1.2"},
       {:clipboard, "~> 0.2", only: :dev}
@@ -88,7 +90,19 @@ defmodule Greecex.MixProject do
         "esbuild greecex --minify",
         "phx.digest"
       ],
-      precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]
+      precommit: [
+        # check-hex-version goes first because hex.audit reports advisories
+        # only on Hex 2.5+ and exits 0 without them on older versions.
+        "cmd bash bin/check-hex-version",
+        # hex.audit has to precede compile because Mix stops resolving tasks
+        # that live in the Hex archive once compile has run in the same VM.
+        "hex.audit",
+        "compile --warnings-as-errors",
+        "deps.unlock --unused",
+        "format",
+        "credo --strict",
+        "test"
+      ]
     ]
   end
 end

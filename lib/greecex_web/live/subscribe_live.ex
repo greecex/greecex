@@ -17,14 +17,10 @@ defmodule GreecexWeb.SubscribeLive do
       RemoteIp.from(x_headers, proxies: ["66.241.124.124"])
 
     address_as_string =
-      cond do
-        address != nil ->
-          address
-          |> Tuple.to_list()
-          |> Enum.join(".")
-
-        true ->
-          peer_data.address |> Tuple.to_list() |> Enum.join(".")
+      if address do
+        address |> Tuple.to_list() |> Enum.join(".")
+      else
+        peer_data.address |> Tuple.to_list() |> Enum.join(".")
       end
 
     {:ok,
@@ -43,58 +39,58 @@ defmodule GreecexWeb.SubscribeLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash}>
-    <div class="max-w-3xl mx-auto text-center px-6">
-      <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
-        Subscribe for updates
-      </h1>
-    </div>
+      <div class="max-w-3xl mx-auto text-center px-6">
+        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
+          Subscribe for updates
+        </h1>
+      </div>
 
-    <%= if @show do %>
-      <.simple_form for={@form} id="subscribe-form" phx-change="validate" phx-submit="subscribe">
-        <.input
-          field={@form[:email]}
-          label="Email"
-          placeholder="Email address for upcoming events and conferences, and notifications"
-          phx-debounce="2000"
-        />
-        <.input
-          field={@form[:city]}
-          label="City"
-          type="select"
-          options={@cities}
-          prompt="Select the city nearest to you for in person meetups"
-        />
-        <.input
-          field={@form[:willing_to_coorganize]}
-          label="Are you interested in co-organizing meetups in the nearest city?"
-          type="checkbox"
-        />
-        <.input
-          field={@form[:elixir_experience]}
-          label="What's your experience with Elixir? (Even if none, share a few words about you)"
-          type="textarea"
-        />
-        <!-- Static honeypot field -->
-        <.input name="website" value="" type="text" style="display: none;" />
-        <div class="prose">
-          <p>
-            By submitting this form, you confirm that you have read and agreed to our <.link navigate="/policies">policies</.link>.
-          </p>
-        </div>
-        <:actions>
-          <.button phx-disable-with="Subscribing..." type="submit">Subscribe</.button>
-        </:actions>
-      </.simple_form>
-      <%= if @error do %>
-        <p class="mt-2 text-red-600 text-sm text-center">{@error}</p>
+      <%= if @show do %>
+        <.simple_form for={@form} id="subscribe-form" phx-change="validate" phx-submit="subscribe">
+          <.input
+            field={@form[:email]}
+            label="Email"
+            placeholder="Email address for upcoming events and conferences, and notifications"
+            phx-debounce="2000"
+          />
+          <.input
+            field={@form[:city]}
+            label="City"
+            type="select"
+            options={@cities}
+            prompt="Select the city nearest to you for in person meetups"
+          />
+          <.input
+            field={@form[:willing_to_coorganize]}
+            label="Are you interested in co-organizing meetups in the nearest city?"
+            type="checkbox"
+          />
+          <.input
+            field={@form[:elixir_experience]}
+            label="What's your experience with Elixir? (Even if none, share a few words about you)"
+            type="textarea"
+          />
+          <!-- Static honeypot field -->
+          <.input name="website" value="" type="text" style="display: none;" />
+          <div class="prose">
+            <p>
+              By submitting this form, you confirm that you have read and agreed to our <.link navigate="/policies">policies</.link>.
+            </p>
+          </div>
+          <:actions>
+            <.button phx-disable-with="Subscribing..." type="submit">Subscribe</.button>
+          </:actions>
+        </.simple_form>
+        <%= if @error do %>
+          <p class="mt-2 text-red-600 text-sm text-center">{@error}</p>
+        <% end %>
       <% end %>
-    <% end %>
 
-    <%= if @success do %>
-      <p class="mt-4 text-green-600 text-sm text-center">
-        Thank you for subscribing! Please check your email for confirmation.
-      </p>
-    <% end %>
+      <%= if @success do %>
+        <p class="mt-4 text-green-600 text-sm text-center">
+          Thank you for subscribing! Please check your email for confirmation.
+        </p>
+      <% end %>
     </Layouts.app>
     """
   end
@@ -127,26 +123,7 @@ defmodule GreecexWeb.SubscribeLive do
 
       case Greecex.RateLimit.hit(key, :timer.hours(1), 8) do
         {:allow, _count} ->
-          case Subscribers.create_subscriber(subscriber_params) do
-            {:ok, _subscriber} ->
-              Logger.info(
-                "Subscriber with email #{subscriber_params["email"]} created from #{socket.assigns.client_ip}"
-              )
-
-              {:noreply, assign(socket, success: true, show: false, error: nil)}
-
-            {:error, %Ecto.Changeset{errors: [email: {"has already been taken", _}]}} ->
-              {:noreply, assign(socket, success: true, show: false, error: nil)}
-
-            {:error, changeset} ->
-              {:noreply,
-               assign(socket,
-                 form: to_form(changeset),
-                 error: "Something went wrong. Please try again.",
-                 success: false,
-                 show: true
-               )}
-          end
+          create_subscriber(socket, subscriber_params)
 
         {:deny, _retry_after} ->
           Logger.error("Too many requests from #{socket.assigns.client_ip}")
@@ -183,5 +160,30 @@ defmodule GreecexWeb.SubscribeLive do
       "Volos",
       "Xanthi"
     ]
+  end
+
+  # An already-taken email looks like success on purpose: it keeps the form
+  # from telling a stranger whether an address is on the list.
+  defp create_subscriber(socket, subscriber_params) do
+    case Subscribers.create_subscriber(subscriber_params) do
+      {:ok, _subscriber} ->
+        Logger.info(
+          "Subscriber with email #{subscriber_params["email"]} created from #{socket.assigns.client_ip}"
+        )
+
+        {:noreply, assign(socket, success: true, show: false, error: nil)}
+
+      {:error, %Ecto.Changeset{errors: [email: {"has already been taken", _}]}} ->
+        {:noreply, assign(socket, success: true, show: false, error: nil)}
+
+      {:error, changeset} ->
+        {:noreply,
+         assign(socket,
+           form: to_form(changeset),
+           error: "Something went wrong. Please try again.",
+           success: false,
+           show: true
+         )}
+    end
   end
 end
