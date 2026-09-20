@@ -61,7 +61,7 @@ defmodule Greecex.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
-      {:earmark, "~> 1.4"},
+      {:mdex, "~> 0.9"},
       {:hammer, "~> 7.0"},
       {:remote_ip, "~> 1.2"},
       {:clipboard, "~> 0.2", only: :dev}

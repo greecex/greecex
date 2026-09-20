@@ -43,58 +43,58 @@ defmodule GreecexWeb.SubscribeLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash}>
-    <div class="max-w-3xl mx-auto text-center px-6">
-      <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
-        Subscribe for updates
-      </h1>
-    </div>
+      <div class="max-w-3xl mx-auto text-center px-6">
+        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
+          Subscribe for updates
+        </h1>
+      </div>
 
-    <%= if @show do %>
-      <.simple_form for={@form} id="subscribe-form" phx-change="validate" phx-submit="subscribe">
-        <.input
-          field={@form[:email]}
-          label="Email"
-          placeholder="Email address for upcoming events and conferences, and notifications"
-          phx-debounce="2000"
-        />
-        <.input
-          field={@form[:city]}
-          label="City"
-          type="select"
-          options={@cities}
-          prompt="Select the city nearest to you for in person meetups"
-        />
-        <.input
-          field={@form[:willing_to_coorganize]}
-          label="Are you interested in co-organizing meetups in the nearest city?"
-          type="checkbox"
-        />
-        <.input
-          field={@form[:elixir_experience]}
-          label="What's your experience with Elixir? (Even if none, share a few words about you)"
-          type="textarea"
-        />
-        <!-- Static honeypot field -->
-        <.input name="website" value="" type="text" style="display: none;" />
-        <div class="prose">
-          <p>
-            By submitting this form, you confirm that you have read and agreed to our <.link navigate="/policies">policies</.link>.
-          </p>
-        </div>
-        <:actions>
-          <.button phx-disable-with="Subscribing..." type="submit">Subscribe</.button>
-        </:actions>
-      </.simple_form>
-      <%= if @error do %>
-        <p class="mt-2 text-red-600 text-sm text-center">{@error}</p>
+      <%= if @show do %>
+        <.simple_form for={@form} id="subscribe-form" phx-change="validate" phx-submit="subscribe">
+          <.input
+            field={@form[:email]}
+            label="Email"
+            placeholder="Email address for upcoming events and conferences, and notifications"
+            phx-debounce="2000"
+          />
+          <.input
+            field={@form[:city]}
+            label="City"
+            type="select"
+            options={@cities}
+            prompt="Select the city nearest to you for in person meetups"
+          />
+          <.input
+            field={@form[:willing_to_coorganize]}
+            label="Are you interested in co-organizing meetups in the nearest city?"
+            type="checkbox"
+          />
+          <.input
+            field={@form[:elixir_experience]}
+            label="What's your experience with Elixir? (Even if none, share a few words about you)"
+            type="textarea"
+          />
+          <!-- Static honeypot field -->
+          <.input name="website" value="" type="text" style="display: none;" />
+          <div class="prose">
+            <p>
+              By submitting this form, you confirm that you have read and agreed to our <.link navigate="/policies">policies</.link>.
+            </p>
+          </div>
+          <:actions>
+            <.button phx-disable-with="Subscribing..." type="submit">Subscribe</.button>
+          </:actions>
+        </.simple_form>
+        <%= if @error do %>
+          <p class="mt-2 text-red-600 text-sm text-center">{@error}</p>
+        <% end %>
       <% end %>
-    <% end %>
 
-    <%= if @success do %>
-      <p class="mt-4 text-green-600 text-sm text-center">
-        Thank you for subscribing! Please check your email for confirmation.
-      </p>
-    <% end %>
+      <%= if @success do %>
+        <p class="mt-4 text-green-600 text-sm text-center">
+          Thank you for subscribing! Please check your email for confirmation.
+        </p>
+      <% end %>
     </Layouts.app>
     """
   end

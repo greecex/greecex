@@ -40,25 +40,25 @@ defmodule GreecexWeb.DebugLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash}>
-    <div class="prose">
-      <h1>Debug</h1>
-      <h3>Peer data:</h3>
-      <ul>
-        <%= for {key, value} <- @peer_data do %>
-          <li>{key}: {inspect(value)}</li>
-        <% end %>
-      </ul>
-      <h3>X Headers:</h3>
-      <ul>
-        <%= for {key, value} <- @x_headers do %>
-          <li>{key}: {inspect(value)}</li>
-        <% end %>
-      </ul>
-      <h3>Address:</h3>
-      <ul>
-        <li>{inspect(@address)}</li>
-      </ul>
-    </div>
+      <div class="prose">
+        <h1>Debug</h1>
+        <h3>Peer data:</h3>
+        <ul>
+          <%= for {key, value} <- @peer_data do %>
+            <li>{key}: {inspect(value)}</li>
+          <% end %>
+        </ul>
+        <h3>X Headers:</h3>
+        <ul>
+          <%= for {key, value} <- @x_headers do %>
+            <li>{key}: {inspect(value)}</li>
+          <% end %>
+        </ul>
+        <h3>Address:</h3>
+        <ul>
+          <li>{inspect(@address)}</li>
+        </ul>
+      </div>
     </Layouts.app>
     """
   end
