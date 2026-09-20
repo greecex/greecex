@@ -90,7 +90,19 @@ defmodule Greecex.MixProject do
         "esbuild greecex --minify",
         "phx.digest"
       ],
-      precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]
+      precommit: [
+        # check-hex-version goes first because hex.audit reports advisories
+        # only on Hex 2.5+ and exits 0 without them on older versions.
+        "cmd bash bin/check-hex-version",
+        # hex.audit has to precede compile because Mix stops resolving tasks
+        # that live in the Hex archive once compile has run in the same VM.
+        "hex.audit",
+        "compile --warnings-as-errors",
+        "deps.unlock --unused",
+        "format",
+        "credo --strict",
+        "test"
+      ]
     ]
   end
 end
