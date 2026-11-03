@@ -1,0 +1,18 @@
+# GitHub Actions only. Hex deps are updated by hand, following
+# keeping-deps-current.md in petros/amignosis-vps.
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "07:15"
+      timezone: "Etc/UTC"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    cooldown:
+      default-days: 7
