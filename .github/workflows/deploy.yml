@@ -30,7 +30,7 @@ jobs:
       MIX_ENV: test
       DATABASE_URL: ecto://postgres:postgres@localhost/greecex_test
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
       - uses: erlef/setup-beam@54075bcc5e249e4758d363f27d099f55d843f124 # v1.24.1
@@ -51,7 +51,7 @@ jobs:
       image: ${{ steps.resolve.outputs.image }}
       debian: ${{ steps.resolve.outputs.debian }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - id: resolve
@@ -71,7 +71,7 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends build-essential git ca-certificates
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - run: mix local.hex --force
