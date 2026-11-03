@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+#
+# Print the hexpm/elixir image that builds this app's release, and the plain
+# Debian image it is based on, as key=value lines for $GITHUB_OUTPUT.
+#
+# The image is Debian 13 (trixie), the same release as the VPS, so the ERTS
+# bundled in the release links against the glibc and OpenSSL the server has.
+# Versions come from .tool-versions. The newest image date published for that
+# Elixir and OTP pair wins. It fails if no image exists for the pair, which
+# means .tool-versions names a combination the registry does not publish.
+#
+# Run locally with: bin/release-image
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+tool_version() { # $1 = tool name -> first version token in .tool-versions
+  awk -v t="$1" '{ sub(/#.*/, "") } $1 == t { print $2; exit }' .tool-versions
+}
+
+elixir_full=$(tool_version elixir) # e.g. 1.19.5-otp-28
+erlang=$(tool_version erlang)      # e.g. 28.4.1
+
+if [ -z "$elixir_full" ] || [ -z "$erlang" ]; then
+  echo "could not read elixir and erlang from .tool-versions" >&2
+  exit 1
+fi
+
+elixir=${elixir_full%%-otp-*}
+otp_suffix=${elixir_full##*-otp-}
+if [ "$otp_suffix" != "${erlang%%.*}" ]; then
+  echo ".tool-versions: elixir is built for OTP $otp_suffix but erlang is $erlang" >&2
+  exit 1
+fi
+
+prefix="${elixir}-erlang-${erlang}-debian-trixie-"
+url="https://hub.docker.com/v2/repositories/hexpm/elixir/tags?page_size=100&name=${prefix}"
+tags=""
+while [ -n "$url" ] && [ "$url" != "null" ]; do
+  page=$(curl -fsS --retry 3 -m 30 "$url")
+  tags+=$(jq -r '.results[].name' <<<"$page")$'\n'
+  url=$(jq -r '.next' <<<"$page")
+done
+
+tag=$(grep -E "^${prefix//./\\.}[0-9]{8}-slim$" <<<"$tags" | sort | tail -1 || true)
+if [ -z "$tag" ]; then
+  echo "no hexpm/elixir image for Elixir $elixir and OTP $erlang on Debian trixie" >&2
+  exit 1
+fi
+
+echo "image=hexpm/elixir:$tag"
+echo "debian=debian:${tag#"${elixir}-erlang-${erlang}-debian-"}"
