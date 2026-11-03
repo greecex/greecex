@@ -36,7 +36,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Set up Elixir
-        uses: erlef/setup-beam@8d44588995e53ce789721e96227122a67826542d
+        uses: erlef/setup-beam@54075bcc5e249e4758d363f27d099f55d843f124 # v1.24.1
         with:
           version-file: .tool-versions
           version-type: strict
@@ -65,7 +65,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Set up Elixir
-        uses: erlef/setup-beam@8d44588995e53ce789721e96227122a67826542d
+        uses: erlef/setup-beam@54075bcc5e249e4758d363f27d099f55d843f124 # v1.24.1
         with:
           version-file: .tool-versions
           version-type: strict
@@ -96,7 +96,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Set up Elixir
-        uses: erlef/setup-beam@8d44588995e53ce789721e96227122a67826542d
+        uses: erlef/setup-beam@54075bcc5e249e4758d363f27d099f55d843f124 # v1.24.1
         with:
           version-file: .tool-versions
           version-type: strict
