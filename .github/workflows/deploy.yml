@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           persist-credentials: false
-      - uses: erlef/setup-beam@8d44588995e53ce789721e96227122a67826542d
+      - uses: erlef/setup-beam@54075bcc5e249e4758d363f27d099f55d843f124 # v1.24.1
         with:
           version-file: .tool-versions
           version-type: strict
@@ -37,7 +37,10 @@ jobs:
 
   build-and-deploy:
     needs: test
-    runs-on: ubuntu-latest
+    # The release bundles ERTS, which links against the build host's glibc.
+    # It must not be newer than the VPS's (Debian 13, glibc 2.41).
+    # ubuntu-latest moved to 26.04 (glibc 2.43) in November 2026.
+    runs-on: ubuntu-24.04
     concurrency:
       group: deploy-greecex
       cancel-in-progress: true
@@ -47,7 +50,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           persist-credentials: false
-      - uses: erlef/setup-beam@8d44588995e53ce789721e96227122a67826542d
+      - uses: erlef/setup-beam@54075bcc5e249e4758d363f27d099f55d843f124 # v1.24.1
         with:
           version-file: .tool-versions
           version-type: strict
